@@ -35,150 +35,164 @@
             line-height: 1.6;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        /* استایل‌های صفحه خوشآمدگویی */
+        .welcome-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--afghan-green) 0%, var(--afghan-black) 50%, var(--afghan-red) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
         }
 
-        /* هدر با طرح افغانستان */
-        header {
-            background: linear-gradient(135deg, var(--afghan-black) 0%, var(--afghan-red) 100%);
+        .welcome-logo {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .welcome-btn {
+            background: white;
+            color: var(--afghan-green);
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
             box-shadow: var(--shadow);
+        }
+
+        .welcome-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* استایل‌های هدر */
+        header {
+            background: white;
+            box-shadow: var(--shadow);
+            padding: 15px 0;
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .nav-container {
+        .header-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         .logo {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 24px;
+            font-size: 1.5rem;
             font-weight: bold;
-            color: white;
-        }
-
-        .logo i {
-            font-size: 28px;
             color: var(--afghan-green);
         }
 
         .nav-links {
             display: flex;
-            list-style: none;
-            gap: 30px;
+            gap: 25px;
         }
 
         .nav-links a {
             text-decoration: none;
-            color: white;
+            color: var(--dark);
             font-weight: 500;
             transition: color 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
 
         .nav-links a:hover {
             color: var(--afghan-green);
         }
 
-        .user-actions {
+        .user-menu {
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--afghan-green);
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: var(--afghan-green);
+            justify-content: center;
             color: white;
+            font-weight: bold;
+            cursor: pointer;
         }
 
-        .btn-primary:hover {
-            background: var(--primary-dark);
+        /* استایل‌های صفحه اصلی */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .btn-outline {
-            background: transparent;
-            border: 1px solid white;
-            color: white;
-        }
-
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* بخش اصلی */
         .main-content {
             display: grid;
             grid-template-columns: 1fr 400px;
-            gap: 30px;
-            margin: 30px 0;
+            gap: 20px;
+            margin-top: 20px;
         }
 
+        /* استایل‌های نقشه */
         .map-container {
-            background: white;
+            position: relative;
+            background: #e9ecef;
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
             overflow: hidden;
             height: 600px;
-            position: relative;
-        }
-
-        .map-placeholder {
-            width: 100%;
-            height: 100%;
-            background: #e9ecef;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: var(--gray);
-            position: relative;
+            box-shadow: var(--shadow);
         }
 
         .kabul-map {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            background: #a8d5ba;
             position: relative;
+        }
+
+        .street {
+            position: absolute;
+            background: #6c757d;
+        }
+
+        .main-street {
+            background: #495057;
         }
 
         .location-marker {
             position: absolute;
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             background: var(--afghan-red);
-            border: 2px solid white;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: all 0.3s;
-        }
-
-        .location-marker:hover {
-            transform: scale(1.3);
-            background: var(--afghan-green);
+            transform: translate(-50%, -50%);
         }
 
         .location-marker::after {
@@ -187,203 +201,289 @@
             top: -25px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.7);
             color: white;
-            padding: 4px 8px;
+            padding: 3px 8px;
             border-radius: 4px;
-            font-size: 12px;
+            font-size: 10px;
             white-space: nowrap;
             opacity: 0;
             transition: opacity 0.3s;
-            pointer-events: none;
         }
 
         .location-marker:hover::after {
             opacity: 1;
         }
 
-        .map-placeholder i {
-            font-size: 64px;
-            margin-bottom: 15px;
-            color: var(--afghan-green);
+        .route-line {
+            position: absolute;
+            height: 4px;
+            background: var(--afghan-green);
+            transform-origin: 0 0;
+            z-index: 5;
         }
 
-        .ride-panel {
-            background: white;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 25px;
-            height: fit-content;
+        .car-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #2196f3;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        .panel-title {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: var(--dark);
+        .car-marker::after {
+            content: "🚗";
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            font-size: 16px;
+            transform: rotate(45deg);
+        }
+
+        /* کنترل‌های نقشه */
+        .map-controls {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 20;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 10px;
         }
 
-        .panel-title i {
-            color: var(--afghan-green);
-        }
-
-        /* فرم درخواست تاکسی */
-        .ride-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group label {
-            font-weight: 500;
-            color: var(--dark);
-            font-size: 14px;
-        }
-
-        .input-with-icon {
-            position: relative;
-        }
-
-        .form-input {
-            padding: 12px 15px 12px 45px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-            width: 100%;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--afghan-green);
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray);
-        }
-
-        .location-swap {
-            display: flex;
-            justify-content: center;
-            margin: 5px 0;
-        }
-
-        .swap-btn {
-            background: var(--light);
-            border: none;
+        .map-control-btn {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            width: 36px;
-            height: 36px;
+            background: white;
+            border: none;
+            box-shadow: var(--shadow);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            color: var(--gray);
+            font-size: 18px;
+            color: var(--dark);
             transition: all 0.3s;
         }
 
-        .swap-btn:hover {
+        .map-control-btn:hover {
             background: var(--afghan-green);
             color: white;
         }
 
-        /* انتخاب نوع سفر */
-        .ride-type-selector {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 15px 0;
+        .map-legend {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            font-size: 12px;
+            z-index: 20;
         }
 
-        .ride-type {
+        .legend-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 15px;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-color.pickup {
+            background: var(--afghan-green);
+        }
+
+        .legend-color.destination {
+            background: var(--afghan-red);
+        }
+
+        .legend-color.driver {
+            background: #2196f3;
+        }
+
+        .legend-color.route {
+            background: var(--afghan-green);
+            width: 20px;
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        .current-location-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #2196f3;
+            border: 3px solid white;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 15;
+            cursor: pointer;
+        }
+
+        .current-location-marker::after {
+            content: "📍";
+            position: absolute;
+            top: -10px;
+            left: -5px;
+            font-size: 16px;
+        }
+
+        .selected-pickup {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: var(--afghan-green);
+            border: 3px solid white;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 15;
+        }
+
+        .selected-destination {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: var(--afghan-red);
+            border: 3px solid white;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 15;
+        }
+
+        .map-instructions {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 20px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            z-index: 10;
+            max-width: 300px;
+            display: none;
+        }
+
+        .map-instructions.active {
+            display: block;
+        }
+
+        /* پنل درخواست سفر */
+        .ride-panel {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .ride-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .ride-option {
             border: 2px solid var(--border);
-            border-radius: 10px;
+            border-radius: var(--radius);
+            padding: 15px 10px;
+            text-align: center;
             cursor: pointer;
             transition: all 0.3s;
         }
 
-        .ride-type:hover {
+        .ride-option.active {
             border-color: var(--afghan-green);
-        }
-
-        .ride-type.selected {
-            border-color: var(--afghan-green);
-            background-color: rgba(0, 197, 105, 0.05);
-        }
-
-        .ride-type-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            background: rgba(0, 197, 105, 0.05);
         }
 
         .ride-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-        }
-
-        .economy .ride-icon {
-            background: #4caf50;
-        }
-
-        .comfort .ride-icon {
-            background: #2196f3;
-        }
-
-        .bike .ride-icon {
-            background: #9c27b0;
-        }
-
-        .ride-details h3 {
-            font-size: 16px;
+            font-size: 1.5rem;
             margin-bottom: 5px;
         }
 
-        .ride-details p {
-            font-size: 13px;
-            color: var(--gray);
+        .ride-name {
+            font-weight: 500;
+            margin-bottom: 5px;
         }
 
         .ride-price {
-            font-weight: bold;
-            color: var(--dark);
-            text-align: right;
-        }
-
-        .price-estimate {
-            font-size: 12px;
+            font-size: 0.9rem;
             color: var(--gray);
-            margin-top: 3px;
         }
 
-        /* اطلاعات مسافت و قیمت */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--afghan-green);
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--afghan-green);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--dark);
+        }
+
+        .btn-outline:hover {
+            background: var(--light);
+        }
+
         .trip-calculator {
             background: var(--light);
+            border-radius: var(--radius);
             padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
+            margin-top: 15px;
             display: none;
         }
 
@@ -391,98 +491,21 @@
             display: block;
         }
 
-        .calculator-row {
+        .calculator-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
-        }
-
-        .calculator-row:last-child {
-            margin-bottom: 0;
-            font-weight: bold;
-            border-top: 1px solid var(--border);
-            padding-top: 8px;
-        }
-
-        /* دکمه درخواست */
-        .submit-btn {
-            background: var(--afghan-green);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .submit-btn:hover {
-            background: var(--primary-dark);
-        }
-
-        .submit-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        /* وضعیت جستجو */
-        .searching-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.9);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .searching-animation {
-            width: 80px;
-            height: 80px;
-            border: 5px solid var(--border);
-            border-top: 5px solid var(--afghan-green);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .searching-text {
-            font-size: 18px;
-            color: var(--dark);
             margin-bottom: 10px;
         }
 
-        .cancel-search {
-            background: transparent;
-            border: 1px solid var(--gray);
-            color: var(--gray);
-            padding: 8px 20px;
-            border-radius: 20px;
-            cursor: pointer;
+        .calculator-total {
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
             margin-top: 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
         }
 
-        .cancel-search:hover {
-            background: var(--gray);
-            color: white;
-        }
-
-        /* مدال راننده */
+        /* استایل‌های مدال */
         .modal {
             display: none;
             position: fixed;
@@ -491,578 +514,405 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
             z-index: 1000;
+            align-items: center;
+            justify-content: center;
         }
 
         .modal-content {
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 450px;
+            border-radius: var(--radius);
             width: 90%;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
         }
 
         .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
         }
 
         .modal-title {
-            font-size: 22px;
-            color: var(--afghan-green);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: bold;
         }
 
-        .close-modal {
+        .modal-close {
             background: none;
             border: none;
-            font-size: 24px;
+            font-size: 1.5rem;
             cursor: pointer;
             color: var(--gray);
         }
 
-        .driver-info {
-            background: var(--light);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-
-        .driver-details {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .driver-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--afghan-green);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .driver-name-rating h3 {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-
-        .driver-rating {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: #ffc107;
-        }
-
-        .car-details {
-            display: flex;
-            justify-content: space-between;
-            padding-top: 15px;
-            border-top: 1px solid var(--border);
-        }
-
-        .car-info {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .car-model {
-            font-weight: bold;
-        }
-
-        .car-color {
-            color: var(--gray);
-            font-size: 14px;
-        }
-
-        .car-plate {
-            background: #f0f0f0;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-family: monospace;
-            font-weight: bold;
-        }
-
-        .trip-info {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(0, 197, 105, 0.05);
-            border-radius: 10px;
-        }
-
-        .trip-detail {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .trip-detail i {
-            font-size: 20px;
-            color: var(--afghan-green);
-        }
-
-        .trip-detail span {
-            font-size: 14px;
-            color: var(--gray);
-        }
-
-        .trip-detail .value {
-            font-weight: bold;
-            color: var(--dark);
-            font-size: 16px;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .modal-actions .btn {
-            flex: 1;
-            justify-content: center;
-        }
-
-        /* پیشنهادات مقصد */
-        .suggestions {
-            background: white;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            margin-top: 20px;
+        .modal-body {
             padding: 20px;
         }
 
-        .suggestions-title {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: var(--dark);
-        }
-
-        .suggestion-list {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        .suggestion-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .suggestion-item:hover {
-            border-color: var(--afghan-green);
-            background: rgba(0, 197, 105, 0.05);
-        }
-
-        .suggestion-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            background: var(--light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--afghan-green);
-        }
-
-        .suggestion-text {
-            font-weight: 500;
-        }
-
-        /* فوتر با طرح افغانستان */
-        footer {
-            background: linear-gradient(135deg, var(--afghan-black) 0%, var(--afghan-red) 100%);
-            color: white;
-            padding: 40px 0 20px;
-            margin-top: 50px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .footer-column h3 {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: var(--afghan-green);
-        }
-
-        .footer-links {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .footer-links a {
-            color: #ddd;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: var(--afghan-green);
-        }
-
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-links a {
-            color: white;
-            font-size: 20px;
-            transition: color 0.3s;
-        }
-
-        .social-links a:hover {
-            color: var(--afghan-green);
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #444;
-            color: #aaa;
-            font-size: 14px;
-        }
-
-        /* ریسپانسیو */
-        @media (max-width: 992px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-content {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .nav-links {
-                gap: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .suggestion-list {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* نوتیفیکیشن */
+        /* نوتیفیکیشن‌ها */
         .notification {
             position: fixed;
             top: 20px;
             right: 20px;
             padding: 15px 20px;
-            background: var(--afghan-green);
-            color: white;
-            border-radius: 8px;
+            border-radius: var(--radius);
+            background: white;
             box-shadow: var(--shadow);
-            display: none;
             z-index: 1100;
-            max-width: 300px;
+            display: none;
+            max-width: 350px;
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--afghan-green);
         }
 
         .notification.error {
-            background: var(--afghan-red);
+            border-left: 4px solid var(--afghan-red);
         }
 
-        /* مناطق کابل */
-        .kabul-districts {
-            margin-top: 30px;
+        .notification.warning {
+            border-left: 4px solid orange;
+        }
+
+        .driver-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
             background: white;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            padding: 20px;
+            padding: 15px;
+            z-index: 1000;
+            max-width: 300px;
+            display: none;
         }
 
-        .districts-title {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .driver-notification.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
         }
 
-        .districts-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-
-        .district-item {
-            padding: 10px;
-            background: var(--light);
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-
-        .district-item:hover {
-            background: var(--afghan-green);
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .districts-grid {
-                grid-template-columns: repeat(2, 1fr);
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
             }
         }
 
-        /* لودینگ */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--afghan-green);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
+        .notification-title {
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .notification-body {
+            font-size: 14px;
+            color: var(--dark);
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .real-time-updates {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 10px 15px;
+            z-index: 20;
+            font-size: 12px;
+            display: none;
+        }
+
+        .real-time-updates.active {
+            display: block;
+        }
+
+        .update-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+
+        .update-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .update-icon {
+            color: var(--afghan-green);
+            font-size: 14px;
+        }
+
+        /* استایل‌های فوتر */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 30px;
+            border-top: 1px solid #444;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        /* استایل‌های موبایل */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .nav-links {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- صفحه خوشآمدگویی -->
+    <div class="welcome-page" id="welcome-page">
+        <div class="welcome-logo">
+            <i class="fas fa-car"></i>
+        </div>
+        <h1 class="welcome-title">اسنپ افغانستان</h1>
+        <p class="welcome-subtitle">اولین و بزرگترین سرویس تاکسی اینترنتی در کابل</p>
+        <button class="welcome-btn" id="start-app-btn">شروع کنید</button>
+    </div>
+
     <!-- هدر -->
-    <header>
-        <div class="container nav-container">
+    <header style="display: none;" id="main-header">
+        <div class="header-container">
             <div class="logo">
-                <i class="fas fa-car-side"></i>
+                <i class="fas fa-car"></i>
                 <span>اسنپ افغانستان</span>
             </div>
-            <ul class="nav-links">
-                <li><a href="#"><i class="fas fa-home"></i> خانه</a></li>
-                <li><a href="#"><i class="fas fa-history"></i> سفرهای من</a></li>
-                <li><a href="#"><i class="fas fa-gift"></i> تخفیفها</a></li>
-                <li><a href="#"><i class="fas fa-question-circle"></i> پشتیبانی</a></li>
-            </ul>
-            <div class="user-actions">
-                <button class="btn btn-outline" id="loginBtn"><i class="fas fa-user"></i> ورود / ثبتنام</button>
+            <nav class="nav-links">
+                <a href="#" class="nav-link active">خانه</a>
+                <a href="#" class="nav-link">سفرهای من</a>
+                <a href="#" class="nav-link">خدمات</a>
+                <a href="#" class="nav-link">درباره ما</a>
+                <a href="#" class="nav-link">تماس با ما</a>
+            </nav>
+            <div class="user-menu">
+                <div class="user-avatar" id="user-avatar">م</div>
             </div>
         </div>
     </header>
 
-    <!-- نوتیفیکیشن -->
-    <div class="notification" id="notification"></div>
-
-    <!-- بخش اصلی -->
-    <div class="container">
-        <div class="main-content">
-            <!-- نقشه کابل -->
-            <div class="map-container">
-                <div class="map-placeholder">
+    <!-- صفحه اصلی -->
+    <div class="container" style="display: none;" id="main-container">
+        <div class="page active" id="home-page">
+            <div class="main-content">
+                <!-- نقشه کابل -->
+                <div class="map-container">
                     <div class="kabul-map" id="kabulMap">
-                        <!-- نقاط مهم کابل به صورت داینامیک اضافه خواهند شد -->
-                    </div>
-                </div>
-                
-                <!-- وضعیت جستجو -->
-                <div class="searching-overlay" id="searchingOverlay">
-                    <div class="searching-animation"></div>
-                    <div class="searching-text" id="searchingText">در حال یافتن نزدیکترین راننده...</div>
-                    <button class="cancel-search" id="cancelSearch">لغو درخواست</button>
-                </div>
-            </div>
-
-            <!-- پنل درخواست سفر -->
-            <div class="ride-panel">
-                <h2 class="panel-title"><i class="fas fa-map-marker-alt"></i> درخواست سفر</h2>
-                
-                <form class="ride-form" id="rideForm">
-                    <div class="form-group">
-                        <label for="pickup">مبدا</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-circle input-icon" style="color: #00c569;"></i>
-                            <input type="text" id="pickup" class="form-input" placeholder="آدرس فعلی شما" required>
+                        <!-- نقشه تعاملی -->
+                        <div class="map-instructions" id="mapInstructions">
+                            <i class="fas fa-mouse-pointer"></i>
+                            <p>برای انتخاب مبدا روی نقشه کلیک کنید</p>
+                            <p>سپس برای انتخاب مقصد دوباره کلیک کنید</p>
                         </div>
                     </div>
                     
-                    <div class="location-swap">
-                        <button type="button" class="swap-btn" id="swapLocations">
-                            <i class="fas fa-exchange-alt"></i>
+                    <!-- کنترل‌های نقشه -->
+                    <div class="map-controls">
+                        <button class="map-control-btn" id="locateMeBtn" title="موقعیت فعلی من">
+                            <i class="fas fa-location-arrow"></i>
+                        </button>
+                        <button class="map-control-btn" id="resetMapBtn" title="بازنشانی نقشه">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button class="map-control-btn" id="zoomInBtn" title="بزرگنمایی">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="map-control-btn" id="zoomOutBtn" title="کوچکنمایی">
+                            <i class="fas fa-minus"></i>
                         </button>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="destination">مقصد</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-flag-checkered input-icon" style="color: #ff4757;"></i>
-                            <input type="text" id="destination" class="form-input" placeholder="محل مورد نظر شما" required>
+                    <!-- راهنمای نقشه -->
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <div class="legend-color pickup"></div>
+                            <span>مبدا</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color destination"></div>
+                            <span>مقصد</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color driver"></div>
+                            <span>راننده</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color route"></div>
+                            <span>مسیر</span>
                         </div>
                     </div>
+                    
+                    <!-- به‌روزرسانی‌های لحظه‌ای -->
+                    <div class="real-time-updates" id="realTimeUpdates">
+                        <div class="update-item">
+                            <i class="fas fa-car update-icon"></i>
+                            <span>رانندگان فعال: <span id="activeDriversCount">12</span></span>
+                        </div>
+                        <div class="update-item">
+                            <i class="fas fa-bolt update-icon"></i>
+                            <span>میانگین زمان انتظار: <span id="avgWaitTime">4</span> دقیقه</span>
+                        </div>
+                    </div>
+                </div>
 
-                    <!-- محاسبه قیمت -->
+                <!-- پنل درخواست سفر -->
+                <div class="ride-panel">
+                    <h2 style="margin-bottom: 20px;">درخواست سفر</h2>
+                    
+                    <div class="ride-options">
+                        <div class="ride-option active" data-type="economy">
+                            <div class="ride-icon">🚗</div>
+                            <div class="ride-name">اکونومی</div>
+                            <div class="ride-price">ارزان‌ترین</div>
+                        </div>
+                        <div class="ride-option" data-type="comfort">
+                            <div class="ride-icon">🚙</div>
+                            <div class="ride-name">کامفورت</div>
+                            <div class="ride-price">راحت‌تر</div>
+                        </div>
+                        <div class="ride-option" data-type="bike">
+                            <div class="ride-icon">🏍️</div>
+                            <div class="ride-name">موتور</div>
+                            <div class="ride-price">سریع‌ترین</div>
+                        </div>
+                    </div>
+                    
+                    <form id="rideForm">
+                        <div class="form-group">
+                            <label for="pickup">مبدا</label>
+                            <input type="text" id="pickup" class="form-control" placeholder="موقعیت فعلی شما">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="destination">مقصد</label>
+                            <input type="text" id="destination" class="form-control" placeholder="مقصد سفر">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" id="submitBtn">درخواست سفر</button>
+                    </form>
+                    
                     <div class="trip-calculator" id="tripCalculator">
-                        <div class="calculator-row">
-                            <span>مسافت تخمینی:</span>
+                        <div class="calculator-item">
+                            <span>مسافت:</span>
                             <span id="distanceValue">0 کیلومتر</span>
                         </div>
-                        <div class="calculator-row">
-                            <span>کرایه پایه:</span>
-                            <span id="baseFareValue">0 افغانی</span>
+                        <div class="calculator-item">
+                            <span>هزینه سفر:</span>
+                            <span id="priceValue">0 افغانی</span>
                         </div>
-                        <div class="calculator-row">
-                            <span>کرایه مسافت (۵ افغانی/کیلومتر):</span>
-                            <span id="distanceFareValue">0 افغانی</span>
+                        <div class="calculator-item calculator-total">
+                            <span>قیمت نهایی:</span>
+                            <span id="totalPrice">0 افغانی</span>
                         </div>
-                        <div class="calculator-row">
-                            <span>هزینه نهایی:</span>
-                            <span id="totalFareValue">0 افغانی</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>نوع سفر</label>
-                        <div class="ride-type-selector" id="rideTypeSelector">
-                            <div class="ride-type economy" data-type="economy" data-base-fare="50">
-                                <div class="ride-type-info">
-                                    <div class="ride-icon">
-                                        <i class="fas fa-car"></i>
-                                    </div>
-                                    <div class="ride-details">
-                                        <h3>اقتصادی</h3>
-                                        <p>مناسب برای سفرهای روزمره</p>
-                                    </div>
-                                </div>
-                                <div class="ride-price">
-                                    <div id="economyPrice">-- افغانی</div>
-                                    <div class="price-estimate">برآورد قیمت</div>
-                                </div>
-                            </div>
-                            <div class="ride-type comfort" data-type="comfort" data-base-fare="80">
-                                <div class="ride-type-info">
-                                    <div class="ride-icon">
-                                        <i class="fas fa-car-side"></i>
-                                    </div>
-                                    <div class="ride-details">
-                                        <h3>کلاسیک</h3>
-                                        <p>خودروی مناسب و راحت</p>
-                                    </div>
-                                </div>
-                                <div class="ride-price">
-                                    <div id="comfortPrice">-- افغانی</div>
-                                    <div class="price-estimate">برآورد قیمت</div>
-                                </div>
-                            </div>
-                            <div class="ride-type bike" data-type="bike" data-base-fare="30">
-                                <div class="ride-type-info">
-                                    <div class="ride-icon">
-                                        <i class="fas fa-motorcycle"></i>
-                                    </div>
-                                    <div class="ride-details">
-                                        <h3>موتور</h3>
-                                        <p>سریع و مقرون به صرفه</p>
-                                    </div>
-                                </div>
-                                <div class="ride-price">
-                                    <div id="bikePrice">-- افغانی</div>
-                                    <div class="price-estimate">برآورد قیمت</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="submit-btn" id="submitBtn">
-                        <i class="fas fa-search"></i>
-                        درخواست خودرو
-                    </button>
-                </form>
-
-                <!-- مناطق کابل -->
-                <div class="kabul-districts">
-                    <h3 class="districts-title"><i class="fas fa-map"></i> مناطق کابل</h3>
-                    <div class="districts-grid" id="districtsGrid">
-                        <!-- مناطق به صورت داینامیک اضافه خواهند شد -->
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- پیشنهادات مقصد -->
-        <div class="suggestions">
-            <h3 class="suggestions-title">مقاصد پرطرفدار در کابل</h3>
-            <div class="suggestion-list">
-                <div class="suggestion-item" data-destination="فرودگاه بین المللی کابل">
-                    <div class="suggestion-icon">
-                        <i class="fas fa-plane"></i>
+    <!-- مدال ورود/ثبت‌نام -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">ورود / ثبت‌نام</h2>
+                <button class="modal-close" id="closeAuthModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="authForm">
+                    <div class="form-group">
+                        <label for="phone">شماره تماس</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="07XX XXX XXXX" required>
                     </div>
-                    <div class="suggestion-text">فرودگاه بین المللی کابل</div>
-                </div>
-                <div class="suggestion-item" data-destination="سفارت آمریکا">
-                    <div class="suggestion-icon">
-                        <i class="fas fa-landmark"></i>
+                    
+                    <div class="form-group">
+                        <label for="password">رمز عبور</label>
+                        <input type="password" id="password" class="form-control" placeholder="رمز عبور" required>
                     </div>
-                    <div class="suggestion-text">سفارت آمریکا</div>
-                </div>
-                <div class="suggestion-item" data-destination="سفارت ایران">
-                    <div class="suggestion-icon">
-                        <i class="fas fa-landmark"></i>
-                    </div>
-                    <div class="suggestion-text">سفارت ایران</div>
-                </div>
-                <div class="suggestion-item" data-destination="سفارت پاکستان">
-                    <div class="suggestion-icon">
-                        <i class="fas fa-landmark"></i>
-                    </div>
-                    <div class="suggestion-text">سفارت پاکستان</div>
-                </div>
-                <div class="suggestion-item" data-destination="وزارت امور خارجه">
-                    <div class="suggestion-icon">
-                        <i class="fas fa-building"></i>
-                    </div>
-                    <div class="suggestion-text">وزارت امور خارجه</div>
-                </div>
-                <div class="suggestion-item" data-destination="ارگ ریاست جمهوری">
-                    <div class="suggestion-icon">
-                        <i class="fas fa-monument"></i>
-                    </div>
-                    <div class="suggestion-text">ارگ ریاست جمهوری</div>
-                </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="authSubmitBtn">ورود</button>
+                </form>
+                
+                <p style="text-align: center; margin-top: 15px;">
+                    حساب کاربری ندارید؟ <a href="#" id="showRegister">ثبت‌نام کنید</a>
+                </p>
             </div>
         </div>
     </div>
@@ -1071,300 +921,209 @@
     <div class="modal" id="driverModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title"><i class="fas fa-check-circle"></i> راننده پیدا شد!</h2>
-                <button class="close-modal" id="closeModal">&times;</button>
+                <h2 class="modal-title">راننده پیدا شد</h2>
+                <button class="modal-close" id="closeDriverModal">&times;</button>
             </div>
-            
-            <div class="driver-info">
-                <div class="driver-details">
-                    <div class="driver-avatar" id="driverAvatar">ا</div>
-                    <div class="driver-name-rating">
-                        <h3 id="driverName">احمد ظاهر</h3>
-                        <div class="driver-rating">
-                            <i class="fas fa-star"></i>
+            <div class="modal-body">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                    <div class="user-avatar" id="driverAvatar" style="width: 60px; height: 60px; font-size: 1.5rem;">ر</div>
+                    <div>
+                        <h3 id="driverName">رضا احمدی</h3>
+                        <div style="display: flex; align-items: center; gap: 5px;">
                             <span id="driverRating">۴.۷</span>
-                            <span id="driverTrips">(۱۲۵ سفر)</span>
+                            <i class="fas fa-star" style="color: gold;"></i>
+                            <span id="driverTrips">(۱۵۰ سفر)</span>
                         </div>
                     </div>
                 </div>
                 
-                <div class="car-details">
-                    <div class="car-info">
-                        <div class="car-model" id="carModel">تویوتا کورولا</div>
-                        <div class="car-color" id="carColor">سفید</div>
+                <div style="background: var(--light); padding: 15px; border-radius: var(--radius); margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>مدل ماشین:</span>
+                        <span id="carModel">تویوتا کورولا</span>
                     </div>
-                    <div class="car-plate" id="plateNumber">کابل ۱۲۳۴</div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>رنگ ماشین:</span>
+                        <span id="carColor">سفید</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>پلاک:</span>
+                        <span id="plateNumber">کابل ۱۲۳۴</span>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="trip-info">
-                <div class="trip-detail">
-                    <i class="fas fa-clock"></i>
-                    <span>زمان رسیدن</span>
-                    <div class="value" id="eta">۴ دقیقه</div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold;" id="eta">۵ دقیقه</div>
+                        <div style="font-size: 0.9rem; color: var(--gray);">زمان رسیدن</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold;" id="distance">۱.۲ کیلومتر</div>
+                        <div style="font-size: 0.9rem; color: var(--gray);">فاصله</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: bold;" id="price">۱۵۰ افغانی</div>
+                        <div style="font-size: 0.9rem; color: var(--gray);">هزینه</div>
+                    </div>
                 </div>
-                <div class="trip-detail">
-                    <i class="fas fa-road"></i>
-                    <span>مسافت</span>
-                    <div class="value" id="distance">۲.۸ کیلومتر</div>
-                </div>
-                <div class="trip-detail">
-                    <i class="fas fa-money-bill-wave"></i>
-                    <span>هزینه</span>
-                    <div class="value" id="price">۱۵۰ افغانی</div>
-                </div>
-            </div>
-            
-            <div class="modal-actions">
-                <button class="btn btn-outline" id="cancelRide">لغو سفر</button>
-                <button class="btn btn-primary" id="confirmRide">تأیید سفر</button>
+                
+                <button class="btn btn-primary" id="confirmTripBtn">تأیید سفر</button>
             </div>
         </div>
     </div>
 
+    <!-- نوتیفیکیشن راننده -->
+    <div class="driver-notification" id="driverNotification">
+        <div class="notification-header">
+            <div class="notification-title">درخواست سفر جدید</div>
+            <button class="notification-close" id="closeDriverNotification">&times;</button>
+        </div>
+        <div class="notification-body">
+            <p>یک درخواست سفر جدید در نزدیکی شما وجود دارد.</p>
+            <p><strong>مبدا:</strong> <span id="notificationPickup">---</span></p>
+            <p><strong>مقصد:</strong> <span id="notificationDestination">---</span></p>
+            <p><strong>هزینه:</strong> <span id="notificationPrice">---</span> افغانی</p>
+        </div>
+        <div class="notification-actions">
+            <button class="btn btn-outline" id="rejectTripBtn">رد کردن</button>
+            <button class="btn btn-primary" id="acceptTripBtn">پذیرفتن</button>
+        </div>
+    </div>
+
+    <!-- نوتیفیکیشن -->
+    <div class="notification" id="notification"></div>
+
     <!-- فوتر -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>اسنپ افغانستان</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">درباره ما</a></li>
-                        <li><a href="#">فرصتهای شغلی</a></li>
-                        <li><a href="#">تماس با ما</a></li>
-                        <li><a href="#">وبلاگ</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>سرویسها</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">تاکسی</a></li>
-                        <li><a href="#">پیک</a></li>
-                        <li><a href="#">اسنپبایسکل</a></li>
-                        <li><a href="#">اسنپمارکت</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>مسافران</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">دانلود اپلیکیشن</a></li>
-                        <li><a href="#">قوانین و مقررات</a></li>
-                        <li><a href="#">سوالات متداول</a></li>
-                        <li><a href="#">حریم خصوصی</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>ارتباط با ما</h3>
-                    <p>پشتیبانی ۲۴ ساعته</p>
-                    <p>تلفن: ۰۷۰۰۱۲۳۴۵۶</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#"><i class="fab fa-telegram"></i></a>
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
+    <footer style="display: none;" id="main-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>اسنپ افغانستان</h3>
+                <p>اولین و بزرگترین سرویس تاکسی اینترنتی در کابل که با کیفیت ترین خدمات را به شهروندان ارائه می‌دهد.</p>
             </div>
-            <div class="footer-bottom">
-                <p>© ۲۰۲۴ اسنپ افغانستان. کلیه حقوق محفوظ است.</p>
+            
+            <div class="footer-section">
+                <h3>لینک‌های مفید</h3>
+                <ul class="footer-links">
+                    <li><a href="#">خانه</a></li>
+                    <li><a href="#">سفرهای من</a></li>
+                    <li><a href="#">خدمات</a></li>
+                    <li><a href="#">درباره ما</a></li>
+                    <li><a href="#">تماس با ما</a></li>
+                </ul>
             </div>
+            
+            <div class="footer-section">
+                <h3>خدمات</h3>
+                <ul class="footer-links">
+                    <li><a href="#">تاکسی</a></li>
+                    <li><a href="#">موتور</a></li>
+                    <li><a href="#">پیک</a></li>
+                    <li><a href="#">سفر بین شهری</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>تماس با ما</h3>
+                <ul class="footer-links">
+                    <li><i class="fas fa-phone"></i> ۰۷۰۰ ۱۲۳ ۴۵۶</li>
+                    <li><i class="fas fa-envelope"></i> info@snapp.af</li>
+                    <li><i class="fas fa-map-marker-alt"></i> کابل، افغانستان</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>کلیه حقوق این سرویس محفوظ است © ۲۰۲۳ اسنپ افغانستان</p>
         </div>
     </footer>
 
     <script>
         // تنظیمات Supabase
-        const SUPABASE_URL = 'https://your-project.supabase.co';
-        const SUPABASE_ANON_KEY = 'your-anon-key';
+        const SUPABASE_URL = 'https://atichswkxinwqewtpvkr.supabase.co'; // جایگزین کنید با URL پروژه شما
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0aWNoc3dreGlud3Fld3RwdmtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE1ODA2NjAsImV4cCI6MjA3NzE1NjY2MH0.UmJ7mQt4bmwIpvlrnp7J1TigQ8JqB09w_0OgcIVCtFA'; // جایگزین کنید با کلید anon شما
         
-        // مقداردهی Supabase (در صورت موجود بودن)
-        let supabase;
-        try {
-            supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        } catch (error) {
-            console.log('Supabase not configured, using local storage');
-        }
-
-        // دادههای مناطق و نقاط مهم کابل
+        // ایجاد کلاینت Supabase
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // داده‌های مناطق و نقاط مهم کابل
         const kabulLocations = [
             // مناطق مرکزی
-            { name: "میدان هوایی", x: 65, y: 45, coordinates: { lat: 34.5658, lng: 69.2124 } },
-            { name: "کارته سخی", x: 60, y: 60, coordinates: { lat: 34.5155, lng: 69.1722 } },
-            { name: "کارته چهار", x: 55, y: 50, coordinates: { lat: 34.5285, lng: 69.1717 } },
-            { name: "شهر نو", x: 50, y: 55, coordinates: { lat: 34.5224, lng: 69.1667 } },
-            { name: "دشت برچی", x: 40, y: 65, coordinates: { lat: 34.4739, lng: 69.1165 } },
-            { name: "قلعه نور", x: 45, y: 40, coordinates: { lat: 34.5486, lng: 69.1983 } },
+            { name: "میدان هوایی", x: 65, y: 45 },
+            { name: "کارته سخی", x: 60, y: 60 },
+            { name: "کارته چهار", x: 55, y: 50 },
+            { name: "شهر نو", x: 50, y: 55 },
+            { name: "دشت برچی", x: 40, y: 65 },
+            { name: "قلعه نور", x: 45, y: 40 },
             
-            // سفارتخانهها
-            { name: "سفارت آمریکا", x: 75, y: 25, coordinates: { lat: 34.5349, lng: 69.1931 } },
-            { name: "سفارت ایران", x: 65, y: 30, coordinates: { lat: 34.5312, lng: 69.1815 } },
-            { name: "سفارت پاکستان", x: 60, y: 35, coordinates: { lat: 34.5268, lng: 69.1762 } },
+            // سفارتخانه‌ها
+            { name: "سفارت امریکا", x: 75, y: 25 },
+            { name: "سفارت ایران", x: 65, y: 30 },
+            { name: "سفارت پاکستان", x: 60, y: 35 },
             
-            // وزارتخانهها
-            { name: "ارگ ریاست جمهوری", x: 70, y: 20, coordinates: { lat: 34.5211, lng: 69.1774 } },
-            { name: "وزارت امور خارجه", x: 65, y: 15, coordinates: { lat: 34.5234, lng: 69.1798 } },
+            // وزارتخانه‌ها
+            { name: "ارگ ریاست جمهوری", x: 70, y: 20 },
+            { name: "وزارت امور خارجه", x: 65, y: 15 },
             
             // مراکز خرید
-            { name: "بازار کابل", x: 50, y: 45, coordinates: { lat: 34.5167, lng: 69.1833 } },
-            { name: "بازار کارته سخی", x: 58, y: 58, coordinates: { lat: 34.5155, lng: 69.1722 } },
+            { name: "بازار کابل", x: 50, y: 45 },
+            { name: "بازار کارته سخی", x: 58, y: 58 },
             
-            // دانشگاهها
-            { name: "دانشگاه کابل", x: 40, y: 35, coordinates: { lat: 34.5210, lng: 69.1580 } },
-            { name: "پلی تکنیک کابل", x: 35, y: 40, coordinates: { lat: 34.5261, lng: 69.1478 } },
+            // دانشگاه‌ها
+            { name: "پوهنتون کابل", x: 40, y: 35 },
+            { name: "پوهنتون پولی تخنیک کابل", x: 35, y: 40 },
             
-            // بیمارستانها
-            { name: "بیمارستان علی آباد", x: 45, y: 50, coordinates: { lat: 34.5315, lng: 69.1902 } },
-            { name: "بیمارستان جمهوریت", x: 65, y: 40, coordinates: { lat: 34.5289, lng: 69.1793 } }
+            // شفاخانه‌ها
+            { name: "شفاخانه علی آباد", x: 45, y: 50 },
+            { name: "شفاخانه جمهوریت", x: 65, y: 40 }
         ];
 
-        // مناطق کابل
-        const kabulDistricts = [
-            "کارته سخی", "کارته چهار", "شهر نو", "دشت برچی", "قلعه نور",
-            "قلعه فتح الله", "پغمان", "مکروریان", "خیرخانه", "قلعه ذوالفقار",
-            "چندول", "ده سبز", "افشار", "قره باغ", "بگرامی"
+        // خیابان‌های کابل
+        const kabulStreets = [
+            { x: 10, y: 50, width: 80, height: 3, main: true },
+            { x: 50, y: 10, width: 3, height: 80, main: true },
+            { x: 20, y: 30, width: 60, height: 2, main: false },
+            { x: 30, y: 20, width: 2, height: 60, main: false },
+            { x: 40, y: 40, width: 40, height: 2, main: false },
+            { x: 40, y: 40, width: 2, height: 40, main: false }
         ];
 
-        // متغیرهای全局
+        // متغیرهای سراسری
+        let currentUser = null;
         let selectedRideType = 'economy';
         let currentDistance = 0;
         let currentPrice = 0;
+        let selectedPickup = null;
+        let selectedDestination = null;
+        let mapMode = 'pickup';
+        let currentLocationMarker = null;
+        let pickupMarker = null;
+        let destinationMarker = null;
+        let driverMarkers = [];
+        let routeLine = null;
+        let currentDriver = null;
+        let currentTripId = null;
 
-        // انتخاب نوع سفر
-        const rideTypeSelector = document.getElementById('rideTypeSelector');
-        const rideTypes = rideTypeSelector.querySelectorAll('.ride-type');
-
-        rideTypes.forEach(type => {
-            type.addEventListener('click', () => {
-                rideTypes.forEach(t => t.classList.remove('selected'));
-                type.classList.add('selected');
-                selectedRideType = type.dataset.type;
-                
-                // بهروزرسانی قیمت بر اساس نوع سفر
-                updatePrice();
-            });
-        });
-
-        // انتخاب اولیه
-        rideTypes[0].classList.add('selected');
-
-        // تعویض مبدا و مقصد
-        const swapBtn = document.getElementById('swapLocations');
-        const pickupInput = document.getElementById('pickup');
-        const destinationInput = document.getElementById('destination');
-        
-        swapBtn.addEventListener('click', () => {
-            const pickupValue = pickupInput.value;
-            const destinationValue = destinationInput.value;
-            
-            if (!destinationValue) {
-                showNotification('لطفاً ابتدا مقصد را وارد کنید', 'error');
-                return;
-            }
-            
-            pickupInput.value = destinationValue;
-            destinationInput.value = pickupValue;
-            
-            // محاسبه مجدد مسافت و قیمت
-            calculateDistanceAndPrice();
-            showNotification('مبدا و مقصد با موفقیت تعویض شدند');
-        });
-
-        // پیشنهادات مقصد
-        const suggestionItems = document.querySelectorAll('.suggestion-item');
-        suggestionItems.forEach(item => {
-            item.addEventListener('click', () => {
-                destinationInput.value = item.dataset.destination;
-                calculateDistanceAndPrice();
-                showNotification(`مقصد به "${item.dataset.destination}" تنظیم شد`);
-            });
-        });
-
-        // مدیریت فرم
-        const rideForm = document.getElementById('rideForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const searchingOverlay = document.getElementById('searchingOverlay');
-        const searchingText = document.getElementById('searchingText');
-        const cancelSearch = document.getElementById('cancelSearch');
-        const driverModal = document.getElementById('driverModal');
-        const closeModal = document.getElementById('closeModal');
-        const cancelRide = document.getElementById('cancelRide');
-        const confirmRide = document.getElementById('confirmRide');
-        const notification = document.getElementById('notification');
-        const tripCalculator = document.getElementById('tripCalculator');
-
-        // دادههای رانندگان برای کابل
-        const drivers = {
-            economy: [
-                { 
-                    name: "احمد ظاهر", 
-                    avatar: "ا",
-                    rating: 4.7, 
-                    trips: 125, 
-                    car: "تویوتا کورولا", 
-                    color: "سفید", 
-                    plate: "کابل ۱۲۳۴", 
-                    eta: "۴ دقیقه"
-                },
-                { 
-                    name: "محمد کاظمی", 
-                    avatar: "م",
-                    rating: 4.9, 
-                    trips: 210, 
-                    car: "پژو ۲۰۶", 
-                    color: "مشکی", 
-                    plate: "کابل ۵۶۷۸", 
-                    eta: "۵ دقیقه"
-                }
-            ],
-            comfort: [
-                { 
-                    name: "رحمان علی", 
-                    avatar: "ر",
-                    rating: 4.8, 
-                    trips: 98, 
-                    car: "تویوتا کامری", 
-                    color: "نقرهای", 
-                    plate: "کابل ۹۰۱۲", 
-                    eta: "۷ دقیقه"
-                },
-                { 
-                    name: "نادر احمدی", 
-                    avatar: "ن",
-                    rating: 4.9, 
-                    trips: 156, 
-                    car: "هیوندای النترا", 
-                    color: "سفید", 
-                    plate: "کابل ۳۴۵۶", 
-                    eta: "۶ دقیقه"
-                }
-            ],
-            bike: [
-                { 
-                    name: "جمیل احمد", 
-                    avatar: "ج",
-                    rating: 4.6, 
-                    trips: 89, 
-                    car: "هوندا ۱۲۵", 
-                    color: "قرمز", 
-                    plate: "کابل ۷۸۹۰", 
-                    eta: "۳ دقیقه"
-                },
-                { 
-                    name: "فضل الرحمن", 
-                    avatar: "ف",
-                    rating: 4.8, 
-                    trips: 134, 
-                    car: "یاماحا ۱۰۰", 
-                    color: "آبی", 
-                    plate: "کابل ۲۳۴۵", 
-                    eta: "۲ دقیقه"
-                }
-            ]
-        };
-
-        // ایجاد نقشه کابل
-        function createKabulMap() {
+        // ایجاد نقشه کابل با قابلیت‌های جدید
+        function createInteractiveMap() {
             const map = document.getElementById('kabulMap');
+            if (!map) return;
             
+            // ایجاد خیابان‌ها
+            kabulStreets.forEach(street => {
+                const streetElement = document.createElement('div');
+                streetElement.className = 'street';
+                if (street.main) {
+                    streetElement.classList.add('main-street');
+                }
+                streetElement.style.left = `${street.x}%`;
+                streetElement.style.top = `${street.y}%`;
+                streetElement.style.width = `${street.width}%`;
+                streetElement.style.height = `${street.height}%`;
+                
+                map.appendChild(streetElement);
+            });
+            
+            // ایجاد نقاط مهم
             kabulLocations.forEach(location => {
                 const marker = document.createElement('div');
                 marker.className = 'location-marker';
@@ -1373,58 +1132,294 @@
                 marker.setAttribute('data-name', location.name);
                 
                 marker.addEventListener('click', () => {
-                    if (!pickupInput.value) {
-                        pickupInput.value = location.name;
-                        showNotification(`مبدا به "${location.name}" تنظیم شد`);
-                    } else if (!destinationInput.value) {
-                        destinationInput.value = location.name;
-                        showNotification(`مقصد به "${location.name}" تنظیم شد`);
-                    } else {
-                        // اگر هر دو پر هستند، از کاربر بپرسیم
-                        if (confirm(`آیا میخواهید "${location.name}" را به عنوان مقصد انتخاب کنید؟`)) {
-                            destinationInput.value = location.name;
-                            showNotification(`مقصد به "${location.name}" تنظیم شد`);
-                        }
-                    }
-                    calculateDistanceAndPrice();
+                    handleLocationClick(location);
                 });
                 
                 map.appendChild(marker);
             });
+            
+            // فعال کردن کلیک روی نقشه برای انتخاب موقعیت
+            map.addEventListener('click', (e) => {
+                if (e.target === map) {
+                    const rect = map.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                    
+                    handleMapClick(x, y);
+                }
+            });
+            
+            // نمایش راهنمای نقشه
+            const mapInstructions = document.getElementById('mapInstructions');
+            if (mapInstructions) {
+                mapInstructions.classList.add('active');
+                
+                // مخفی کردن راهنما پس از 5 ثانیه
+                setTimeout(() => {
+                    mapInstructions.classList.remove('active');
+                }, 5000);
+            }
+            
+            // فعال کردن به‌روزرسانی‌های لحظه‌ای
+            const realTimeUpdates = document.getElementById('realTimeUpdates');
+            if (realTimeUpdates) {
+                realTimeUpdates.classList.add('active');
+            }
+            
+            // شبیه‌سازی رانندگان فعال
+            simulateActiveDrivers();
         }
 
-        // ایجاد لیست مناطق
-        function createDistrictsList() {
-            const districtsGrid = document.getElementById('districtsGrid');
+        // مدیریت کلیک روی نقشه
+        function handleMapClick(x, y) {
+            if (mapMode === 'pickup') {
+                // انتخاب مبدا
+                selectPickupLocation(x, y);
+                mapMode = 'destination';
+                showNotification('حالا مقصد سفر را انتخاب کنید', 'success');
+            } else if (mapMode === 'destination') {
+                // انتخاب مقصد
+                selectDestinationLocation(x, y);
+                mapMode = 'pickup';
+            }
+        }
+
+        // مدیریت کلیک روی مکان‌های مشخص
+        function handleLocationClick(location) {
+            if (mapMode === 'pickup') {
+                // انتخاب مبدا
+                selectPickupLocation(location.x, location.y, location.name);
+                mapMode = 'destination';
+                showNotification('حالا مقصد سفر را انتخاب کنید', 'success');
+            } else if (mapMode === 'destination') {
+                // انتخاب مقصد
+                selectDestinationLocation(location.x, location.y, location.name);
+                mapMode = 'pickup';
+            }
+        }
+
+        // انتخاب مبدا
+        function selectPickupLocation(x, y, name = null) {
+            const map = document.getElementById('kabulMap');
+            if (!map) return;
             
-            kabulDistricts.forEach(district => {
-                const districtItem = document.createElement('div');
-                districtItem.className = 'district-item';
-                districtItem.textContent = district;
+            // حذف نشانگر قبلی
+            if (pickupMarker) {
+                pickupMarker.remove();
+            }
+            
+            // ایجاد نشانگر جدید
+            pickupMarker = document.createElement('div');
+            pickupMarker.className = 'selected-pickup';
+            pickupMarker.style.left = `${x}%`;
+            pickupMarker.style.top = `${y}%`;
+            map.appendChild(pickupMarker);
+            
+            // ذخیره موقعیت انتخاب شده
+            selectedPickup = { x, y, name };
+            
+            // به‌روزرسانی فیلد مبدا
+            const pickupInput = document.getElementById('pickup');
+            if (pickupInput) {
+                pickupInput.value = name || `موقعیت انتخاب شده (${x.toFixed(1)}%, ${y.toFixed(1)}%)`;
+            }
+            
+            // محاسبه مسافت و قیمت
+            if (selectedDestination) {
+                calculateDistanceAndPrice();
+            }
+        }
+
+        // انتخاب مقصد
+        function selectDestinationLocation(x, y, name = null) {
+            const map = document.getElementById('kabulMap');
+            if (!map) return;
+            
+            // حذف نشانگر قبلی
+            if (destinationMarker) {
+                destinationMarker.remove();
+            }
+            
+            // ایجاد نشانگر جدید
+            destinationMarker = document.createElement('div');
+            destinationMarker.className = 'selected-destination';
+            destinationMarker.style.left = `${x}%`;
+            destinationMarker.style.top = `${y}%`;
+            map.appendChild(destinationMarker);
+            
+            // ذخیره موقعیت انتخاب شده
+            selectedDestination = { x, y, name };
+            
+            // به‌روزرسانی فیلد مقصد
+            const destinationInput = document.getElementById('destination');
+            if (destinationInput) {
+                destinationInput.value = name || `موقعیت انتخاب شده (${x.toFixed(1)}%, ${y.toFixed(1)}%)`;
+            }
+            
+            // محاسبه مسافت و قیمت
+            if (selectedPickup) {
+                calculateDistanceAndPrice();
                 
-                districtItem.addEventListener('click', () => {
-                    if (!pickupInput.value) {
-                        pickupInput.value = district;
-                        showNotification(`مبدا به "${district}" تنظیم شد`);
-                    } else if (!destinationInput.value) {
-                        destinationInput.value = district;
-                        showNotification(`مقصد به "${district}" تنظیم شد`);
-                    } else {
-                        // اگر هر دو پر هستند، از کاربر بپرسیم
-                        if (confirm(`آیا میخواهید "${district}" را به عنوان مقصد انتخاب کنید؟`)) {
-                            destinationInput.value = district;
-                            showNotification(`مقصد به "${district}" تنظیم شد`);
-                        }
+                // رسم مسیر
+                drawRoute(selectedPickup, selectedDestination);
+            }
+        }
+
+        // رسم مسیر بین دو نقطه
+        function drawRoute(start, end) {
+            // حذف مسیر قبلی
+            if (routeLine) {
+                routeLine.remove();
+            }
+            
+            const map = document.getElementById('kabulMap');
+            if (!map) return;
+            
+            // محاسبه مختصات و زاویه خط
+            const dx = end.x - start.x;
+            const dy = end.y - start.y;
+            const length = Math.sqrt(dx * dx + dy * dy);
+            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+            
+            // ایجاد خط مسیر
+            routeLine = document.createElement('div');
+            routeLine.className = 'route-line';
+            routeLine.style.left = `${start.x}%`;
+            routeLine.style.top = `${start.y}%`;
+            routeLine.style.width = `${length}%`;
+            routeLine.style.transform = `rotate(${angle}deg)`;
+            
+            map.appendChild(routeLine);
+        }
+
+        // موقعیت‌یابی کاربر
+        function locateUser() {
+            if (!navigator.geolocation) {
+                showNotification('مرورگر شما از موقعیت‌یابی پشتیبانی نمی‌کند', 'error');
+                return;
+            }
+            
+            showNotification('در حال دریافت موقعیت شما...', 'warning');
+            
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    
+                    // در اینجا باید از API نقشه برای تبدیل مختصات به موقعیت در نقشه استفاده شود
+                    // برای نمونه، از موقعیت تصادفی استفاده می‌کنیم
+                    const randomX = Math.floor(Math.random() * 80) + 10;
+                    const randomY = Math.floor(Math.random() * 80) + 10;
+                    
+                    userLocation = { x: randomX, y: randomY };
+                    
+                    // نمایش موقعیت کاربر روی نقشه
+                    showUserLocation(userLocation.x, userLocation.y);
+                    
+                    // پر کردن خودکار فیلد مبدا
+                    const pickupInput = document.getElementById('pickup');
+                    if (pickupInput) {
+                        pickupInput.value = 'موقعیت فعلی من';
                     }
-                    calculateDistanceAndPrice();
-                });
+                    
+                    // انتخاب موقعیت کاربر به عنوان مبدا
+                    selectPickupLocation(userLocation.x, userLocation.y, 'موقعیت فعلی من');
+                    
+                    showNotification('موقعیت شما با موفقیت دریافت شد', 'success');
+                },
+                (error) => {
+                    console.error('خطا در دریافت موقعیت:', error);
+                    let errorMessage = 'خطا در دریافت موقعیت';
+                    
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMessage = 'دسترسی به موقعیت شما رد شد';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMessage = 'اطلاعات موقعیت در دسترس نیست';
+                            break;
+                        case error.TIMEOUT:
+                            errorMessage = 'دریافت موقعیت زمان‌بر شد';
+                            break;
+                    }
+                    
+                    showNotification(errorMessage, 'error');
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 60000
+                }
+            );
+        }
+
+        // نمایش موقعیت کاربر روی نقشه
+        function showUserLocation(x, y) {
+            const map = document.getElementById('kabulMap');
+            if (!map) return;
+            
+            // حذف نشانگر قبلی
+            if (currentLocationMarker) {
+                currentLocationMarker.remove();
+            }
+            
+            // ایجاد نشانگر جدید
+            currentLocationMarker = document.createElement('div');
+            currentLocationMarker.className = 'current-location-marker';
+            currentLocationMarker.style.left = `${x}%`;
+            currentLocationMarker.style.top = `${y}%`;
+            currentLocationMarker.title = 'موقعیت فعلی شما';
+            map.appendChild(currentLocationMarker);
+        }
+
+        // شبیه‌سازی رانندگان فعال
+        function simulateActiveDrivers() {
+            const map = document.getElementById('kabulMap');
+            if (!map) return;
+            
+            // حذف رانندگان قبلی
+            driverMarkers.forEach(marker => marker.remove());
+            driverMarkers = [];
+            
+            // ایجاد رانندگان فعال
+            const activeDriversCount = Math.floor(Math.random() * 10) + 5; // 5 تا 15 راننده
+            
+            for (let i = 0; i < activeDriversCount; i++) {
+                const randomX = Math.floor(Math.random() * 80) + 10;
+                const randomY = Math.floor(Math.random() * 80) + 10;
                 
-                districtsGrid.appendChild(districtItem);
-            });
+                const driverMarker = document.createElement('div');
+                driverMarker.className = 'car-marker';
+                driverMarker.style.left = `${randomX}%`;
+                driverMarker.style.top = `${randomY}%`;
+                driverMarker.title = 'راننده فعال';
+                
+                map.appendChild(driverMarker);
+                driverMarkers.push(driverMarker);
+            }
+            
+            // به‌روزرسانی شمارنده رانندگان فعال
+            const activeDriversCountElement = document.getElementById('activeDriversCount');
+            if (activeDriversCountElement) {
+                activeDriversCountElement.textContent = activeDriversCount;
+            }
+            
+            // به‌روزرسانی میانگین زمان انتظار
+            const avgWaitTimeElement = document.getElementById('avgWaitTime');
+            if (avgWaitTimeElement) {
+                const avgWaitTime = Math.max(2, Math.floor(15 / activeDriversCount));
+                avgWaitTimeElement.textContent = avgWaitTime;
+            }
         }
 
         // محاسبه مسافت و قیمت
         function calculateDistanceAndPrice() {
+            const pickupInput = document.getElementById('pickup');
+            const destinationInput = document.getElementById('destination');
+            const tripCalculator = document.getElementById('tripCalculator');
+            
+            if (!pickupInput || !destinationInput || !tripCalculator) return;
+            
             const pickup = pickupInput.value;
             const destination = destinationInput.value;
 
@@ -1433,244 +1428,579 @@
                 return;
             }
 
-            // شبیهسازی محاسبه مسافت (در حالت واقعی از API نقشه استفاده میشود)
-            const randomDistance = (Math.random() * 15 + 2).toFixed(1); // بین ۲ تا ۱۷ کیلومتر
-            currentDistance = parseFloat(randomDistance);
+            // محاسبه مسافت بر اساس موقعیت‌های انتخاب شده
+            let distance = 0;
+            
+            if (selectedPickup && selectedDestination) {
+                // محاسبه فاصله اقلیدسی بین دو نقطه (در حالت واقعی از الگوریتم مسیریابی استفاده می‌شود)
+                const dx = selectedDestination.x - selectedPickup.x;
+                const dy = selectedDestination.y - selectedPickup.y;
+                distance = Math.sqrt(dx * dx + dy * dy) / 5; // تبدیل به مقیاس واقعی
+            } else {
+                // شبیه‌سازی محاسبه مسافت
+                distance = (Math.random() * 15 + 2); // بین ۲ تا ۱۷ کیلومتر
+            }
+            
+            currentDistance = parseFloat(distance.toFixed(1));
 
-            // نمایش اطلاعات مسافت
-            document.getElementById('distanceValue').textContent = `${currentDistance} کیلومتر`;
+            // نمایش معلومات مسافت
+            const distanceValue = document.getElementById('distanceValue');
+            if (distanceValue) distanceValue.textContent = `${currentDistance} کیلومتر`;
+            
             tripCalculator.classList.add('active');
 
-            // بهروزرسانی قیمت
+            // به‌روزرسانی قیمت
             updatePrice();
         }
 
-        // بهروزرسانی قیمت
+        // به‌روزرسانی قیمت
         function updatePrice() {
-            if (currentDistance === 0) return;
-
-            const selectedRide = document.querySelector('.ride-type.selected');
-            const baseFare = parseInt(selectedRide.dataset.baseFare);
-            const distanceFare = Math.round(currentDistance * 5); // ۵ افغانی per kilometer
-            const totalFare = baseFare + distanceFare;
-
-            currentPrice = totalFare;
-
-            // نمایش جزئیات قیمت
-            document.getElementById('baseFareValue').textContent = `${baseFare} افغانی`;
-            document.getElementById('distanceFareValue').textContent = `${distanceFare} افغانی`;
-            document.getElementById('totalFareValue').textContent = `${totalFare} افغانی`;
-
-            // بهروزرسانی قیمت در کارتها
-            document.getElementById('economyPrice').textContent = `${calculateRidePrice('economy')} افغانی`;
-            document.getElementById('comfortPrice').textContent = `${calculateRidePrice('comfort')} افغانی`;
-            document.getElementById('bikePrice').textContent = `${calculateRidePrice('bike')} افغانی`;
-        }
-
-        // محاسبه قیمت برای هر نوع سفر
-        function calculateRidePrice(type) {
-            const baseFares = {
-                economy: 50,
-                comfort: 80,
-                bike: 30
-            };
+            let basePrice = 0;
             
-            return baseFares[type] + Math.round(currentDistance * 5);
-        }
-
-        rideForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const pickup = pickupInput.value;
-            const destination = destinationInput.value;
-
-            if (!pickup || !destination) {
-                showNotification('لطفاً مبدا و مقصد را وارد کنید', 'error');
-                return;
+            switch(selectedRideType) {
+                case 'economy':
+                    basePrice = 50;
+                    break;
+                case 'comfort':
+                    basePrice = 80;
+                    break;
+                case 'bike':
+                    basePrice = 30;
+                    break;
             }
-
-            if (pickup === destination) {
-                showNotification('مبدا و مقصد نمیتوانند یکسان باشند', 'error');
-                return;
-            }
-
-            if (currentDistance === 0) {
-                showNotification('لطفاً منتظر بمانید تا مسافت محاسبه شود', 'error');
-                return;
-            }
-
-            // ذخیره سفر در Supabase
-            const tripData = {
-                pickup,
-                destination,
-                ride_type: selectedRideType,
-                distance: currentDistance,
-                price: currentPrice,
-                status: 'requested',
-                created_at: new Date().toISOString()
-            };
-
-            try {
-                if (supabase) {
-                    const { data, error } = await supabase
-                        .from('trips')
-                        .insert([tripData])
-                        .select();
-
-                    if (error) throw error;
-                    
-                    showNotification('سفر شما ثبت شد. در حال یافتن راننده...');
-                } else {
-                    // ذخیره در localStorage اگر Supabase موجود نباشد
-                    const trips = JSON.parse(localStorage.getItem('snapp_trips') || '[]');
-                    trips.push({...tripData, id: Date.now()});
-                    localStorage.setItem('snapp_trips', JSON.stringify(trips));
-                }
-
-                // شروع جستجو
-                startDriverSearch();
-            } catch (error) {
-                console.error('Error saving trip:', error);
-                showNotification('خطا در ثبت سفر. لطفاً مجدداً تلاش کنید.', 'error');
-            }
-        });
-
-        function startDriverSearch() {
-            submitBtn.disabled = true;
-            searchingOverlay.style.display = 'flex';
             
-            let searchTime = 0;
-            const searchInterval = setInterval(() => {
-                searchTime++;
-                
-                if (searchTime === 3) {
-                    searchingText.textContent = "در حال بررسی رانندگان موجود...";
-                } else if (searchTime === 6) {
-                    searchingText.textContent = "برقراری ارتباط با راننده...";
-                } else if (searchTime === 9) {
-                    // پیدا کردن راننده
-                    clearInterval(searchInterval);
-                    findDriver();
-                }
-            }, 500);
+            currentPrice = Math.round(basePrice + (currentDistance * 15));
             
-            // ذخیره interval برای لغو
-            window.searchInterval = searchInterval;
-        }
-
-        function findDriver() {
-            searchingOverlay.style.display = 'none';
-            submitBtn.disabled = false;
+            const priceValue = document.getElementById('priceValue');
+            const totalPrice = document.getElementById('totalPrice');
             
-            // انتخاب تصادفی راننده از نوع انتخاب شده
-            const availableDrivers = drivers[selectedRideType];
-            const randomDriver = availableDrivers[Math.floor(Math.random() * availableDrivers.length)];
-            
-            // پر کردن اطلاعات راننده در مدال
-            document.getElementById('driverAvatar').textContent = randomDriver.avatar;
-            document.getElementById('driverName').textContent = randomDriver.name;
-            document.getElementById('driverRating').textContent = randomDriver.rating;
-            document.getElementById('driverTrips').textContent = `(${randomDriver.trips} سفر)`;
-            document.getElementById('carModel').textContent = randomDriver.car;
-            document.getElementById('carColor').textContent = randomDriver.color;
-            document.getElementById('plateNumber').textContent = randomDriver.plate;
-            document.getElementById('eta').textContent = randomDriver.eta;
-            document.getElementById('distance').textContent = `${currentDistance} کیلومتر`;
-            document.getElementById('price').textContent = `${currentPrice} افغانی`;
-            
-            // نمایش مدال
-            driverModal.style.display = 'flex';
-            
-            showNotification(`راننده ${randomDriver.name} پیدا شد!`);
+            if (priceValue) priceValue.textContent = `${currentPrice} افغانی`;
+            if (totalPrice) totalPrice.textContent = `${currentPrice} افغانی`;
         }
 
         // نمایش نوتیفیکیشن
         function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            if (!notification) return;
+            
             notification.textContent = message;
-            notification.className = 'notification';
-            
-            if (type === 'error') {
-                notification.classList.add('error');
-            }
-            
+            notification.className = `notification ${type}`;
             notification.style.display = 'block';
             
             setTimeout(() => {
                 notification.style.display = 'none';
+            }, 5000);
+        }
+
+        // بررسی وضعیت ورود کاربر
+        async function checkUserLoginStatus() {
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (user) {
+                currentUser = {
+                    id: user.id,
+                    phone: user.phone,
+                    name: user.user_metadata?.name || 'کاربر'
+                };
+                
+                // به‌روزرسانی آواتار کاربر
+                const userAvatar = document.getElementById('user-avatar');
+                if (userAvatar) {
+                    userAvatar.textContent = currentUser.name.charAt(0);
+                }
+                
+                return true;
+            } else {
+                currentUser = null;
+                return false;
+            }
+        }
+
+        // ورود کاربر
+        async function loginUser(phone, password) {
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    phone: phone,
+                    password: password
+                });
+                
+                if (error) {
+                    throw error;
+                }
+                
+                if (data.user) {
+                    currentUser = {
+                        id: data.user.id,
+                        phone: data.user.phone,
+                        name: data.user.user_metadata?.name || 'کاربر'
+                    };
+                    
+                    // به‌روزرسانی آواتار کاربر
+                    const userAvatar = document.getElementById('user-avatar');
+                    if (userAvatar) {
+                        userAvatar.textContent = currentUser.name.charAt(0);
+                    }
+                    
+                    showNotification('با موفقیت وارد شدید', 'success');
+                    closeAuthModal();
+                    
+                    return true;
+                }
+            } catch (error) {
+                console.error('خطا در ورود:', error);
+                showNotification('خطا در ورود: ' + error.message, 'error');
+                return false;
+            }
+        }
+
+        // ثبت‌نام کاربر
+        async function registerUser(phone, password, name) {
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    phone: phone,
+                    password: password,
+                    options: {
+                        data: {
+                            name: name
+                        }
+                    }
+                });
+                
+                if (error) {
+                    throw error;
+                }
+                
+                if (data.user) {
+                    showNotification('ثبت‌نام موفقیت‌آمیز بود. لطفاً وارد شوید.', 'success');
+                    return true;
+                }
+            } catch (error) {
+                console.error('خطا در ثبت‌نام:', error);
+                showNotification('خطا در ثبت‌نام: ' + error.message, 'error');
+                return false;
+            }
+        }
+
+        // ذخیره سفر در Supabase
+        async function saveTripToSupabase(tripData) {
+            try {
+                const { data, error } = await supabase
+                    .from('trips')
+                    .insert([tripData])
+                    .select();
+                
+                if (error) {
+                    throw error;
+                }
+                
+                if (data && data.length > 0) {
+                    return data[0].id;
+                }
+            } catch (error) {
+                console.error('خطا در ذخیره سفر:', error);
+                throw error;
+            }
+        }
+
+        // باز کردن مدال ورود
+        function openAuthModal() {
+            const authModal = document.getElementById('authModal');
+            if (authModal) {
+                authModal.style.display = 'flex';
+            }
+        }
+
+        // بستن مدال ورود
+        function closeAuthModal() {
+            const authModal = document.getElementById('authModal');
+            if (authModal) {
+                authModal.style.display = 'none';
+            }
+        }
+
+        // شروع جستجوی راننده
+        function startDriverSearch() {
+            const submitBtn = document.getElementById('submitBtn');
+            if (submitBtn) submitBtn.disabled = true;
+            
+            showNotification('در حال یافتن راننده...', 'warning');
+            
+            // شبیه‌سازی جستجوی راننده
+            setTimeout(() => {
+                findDriver();
             }, 3000);
         }
 
-        // لغو جستجو
-        cancelSearch.addEventListener('click', () => {
-            clearInterval(window.searchInterval);
-            searchingOverlay.style.display = 'none';
-            submitBtn.disabled = false;
-            showNotification('جستجو لغو شد');
-        });
-
-        // بستن مدال
-        closeModal.addEventListener('click', () => {
-            driverModal.style.display = 'none';
-        });
-
-        // لغو سفر
-        cancelRide.addEventListener('click', () => {
-            driverModal.style.display = 'none';
-            showNotification('سفر شما لغو شد.');
-        });
-
-        // تأیید سفر
-        confirmRide.addEventListener('click', async () => {
-            driverModal.style.display = 'none';
+        // یافتن راننده
+        function findDriver() {
+            // در اینجا باید از موقعیت‌های انتخاب شده برای یافتن راننده نزدیک استفاده شود
+            const pickupLocation = selectedPickup;
             
-            try {
-                // بهروزرسانی وضعیت سفر در Supabase
-                if (supabase) {
-                    const { error } = await supabase
-                        .from('trips')
-                        .update({ status: 'confirmed' })
-                        .eq('pickup', pickupInput.value)
-                        .eq('destination', destinationInput.value)
-                        .order('created_at', { ascending: false })
-                        .limit(1);
-
-                    if (error) throw error;
-                }
-
-                showNotification('سفر شما با موفقیت ثبت شد. راننده به زودی با شما تماس خواهد گرفت.');
-                rideForm.reset();
-                tripCalculator.classList.remove('active');
-                currentDistance = 0;
-                currentPrice = 0;
-                
-                // بازنشانی به حالت اولیه
-                rideTypes.forEach(t => t.classList.remove('selected'));
-                rideTypes[0].classList.add('selected');
-                selectedRideType = 'economy';
-            } catch (error) {
-                console.error('Error confirming trip:', error);
-                showNotification('خطا در تأیید سفر. لطفاً مجدداً تلاش کنید.', 'error');
+            if (!pickupLocation) {
+                showNotification('لطفاً ابتدا مبدا را انتخاب کنید', 'error');
+                return;
             }
-        });
+            
+            // شبیه‌سازی یافتن راننده
+            const driver = {
+                id: 1,
+                name: 'رضا احمدی',
+                rating: '۴.۷',
+                car_model: 'تویوتا کورولا',
+                car_color: 'سفید',
+                plate_number: 'کابل ۱۲۳۴',
+                eta: '۵ دقیقه',
+                distance: '۱.۲ کیلومتر'
+            };
+            
+            currentDriver = driver;
+            
+            // پر کردن معلومات راننده در مدال
+            const driverAvatar = document.getElementById('driverAvatar');
+            const driverName = document.getElementById('driverName');
+            const driverRating = document.getElementById('driverRating');
+            const driverTrips = document.getElementById('driverTrips');
+            const carModel = document.getElementById('carModel');
+            const carColor = document.getElementById('carColor');
+            const plateNumber = document.getElementById('plateNumber');
+            const eta = document.getElementById('eta');
+            const distance = document.getElementById('distance');
+            const price = document.getElementById('price');
+            
+            if (driverAvatar) driverAvatar.textContent = driver.name.charAt(0);
+            if (driverName) driverName.textContent = driver.name;
+            if (driverRating) driverRating.textContent = driver.rating;
+            if (driverTrips) driverTrips.textContent = '(۱۵۰ سفر)';
+            if (carModel) carModel.textContent = driver.car_model;
+            if (carColor) carColor.textContent = driver.car_color;
+            if (plateNumber) plateNumber.textContent = driver.plate_number;
+            if (eta) eta.textContent = driver.eta;
+            if (distance) distance.textContent = driver.distance;
+            if (price) price.textContent = `${currentPrice} افغانی`;
+            
+            // نمایش مدال
+            const driverModal = document.getElementById('driverModal');
+            if (driverModal) driverModal.style.display = 'flex';
+            
+            showNotification(`راننده ${driver.name} پیدا شد!`, 'success');
+        }
 
-        // محاسبه مسافت هنگام تغییر مقصد
-        destinationInput.addEventListener('input', () => {
-            setTimeout(calculateDistanceAndPrice, 1000);
-        });
+        // ارسال اعلان به راننده
+        function sendDriverNotification(tripData) {
+            // شبیه‌سازی ارسال اعلان به رانندگان نزدیک
+            const drivers = [
+                { id: 1, name: 'رضا احمدی', status: 'active' },
+                { id: 2, name: 'علی کریمی', status: 'active' },
+                { id: 3, name: 'حسین محمدی', status: 'active' }
+            ];
+            
+            if (drivers.length === 0) {
+                showNotification('هیچ راننده‌ای در حال حاضر در دسترس نیست', 'error');
+                return;
+            }
+            
+            // انتخاب راننده تصادفی برای نمایش اعلان
+            const randomDriver = drivers[Math.floor(Math.random() * drivers.length)];
+            
+            // نمایش اعلان به راننده (در حالت واقعی این اعلان به اپلیکیشن راننده ارسال می‌شود)
+            showDriverNotification(tripData, randomDriver);
+            
+            // نمایش پیام به کاربر
+            showNotification(`درخواست شما به ${randomDriver.name} ارسال شد`, 'success');
+        }
 
-        pickupInput.addEventListener('input', () => {
-            setTimeout(calculateDistanceAndPrice, 1000);
-        });
+        // نمایش اعلان به راننده
+        function showDriverNotification(tripData, driver) {
+            const notification = document.getElementById('driverNotification');
+            const notificationPickup = document.getElementById('notificationPickup');
+            const notificationDestination = document.getElementById('notificationDestination');
+            const notificationPrice = document.getElementById('notificationPrice');
+            
+            if (!notification || !notificationPickup || !notificationDestination || !notificationPrice) return;
+            
+            // پر کردن اطلاعات اعلان
+            notificationPickup.textContent = tripData.pickup;
+            notificationDestination.textContent = tripData.destination;
+            notificationPrice.textContent = tripData.price;
+            
+            // نمایش اعلان
+            notification.classList.add('active');
+            
+            // تنظیم timeout برای خودکار بسته شدن اعلان
+            setTimeout(() => {
+                if (notification.classList.contains('active')) {
+                    notification.classList.remove('active');
+                    // در حالت واقعی، اگر راننده پاسخ ندهد، به راننده بعدی ارسال می‌شود
+                    showNotification('راننده پاسخ نداد. در حال یافتن راننده دیگر...', 'warning');
+                    // شبیه‌سازی یافتن راننده دیگر
+                    setTimeout(findDriver, 2000);
+                }
+            }, 15000); // 15 ثانیه timeout
+        }
 
         // تنظیمات اولیه
         window.onload = function() {
-            createKabulMap();
-            createDistrictsList();
-            showNotification('به اسنپ افغانستان خوش آمدید! سرویس تاکسی اینترنتی در سراسر کابل');
+            createInteractiveMap();
+            checkUserLoginStatus();
             
-            // تنظیم رویداد برای دکمه ورود
-            document.getElementById('loginBtn').addEventListener('click', () => {
-                showNotification('سیستم ورود/ثبتنام به زودی راهاندازی میشود');
+            // دکمه شروع برنامه
+            const startAppBtn = document.getElementById('start-app-btn');
+            if (startAppBtn) {
+                startAppBtn.addEventListener('click', () => {
+                    const welcomePage = document.getElementById('welcome-page');
+                    const mainHeader = document.getElementById('main-header');
+                    const mainContainer = document.getElementById('main-container');
+                    const mainFooter = document.getElementById('main-footer');
+                    
+                    if (welcomePage) welcomePage.style.display = 'none';
+                    if (mainHeader) mainHeader.style.display = 'block';
+                    if (mainContainer) mainContainer.style.display = 'block';
+                    if (mainFooter) mainFooter.style.display = 'block';
+                    
+                    // بررسی وضعیت ورود کاربر
+                    if (!currentUser) {
+                        openAuthModal();
+                    }
+                });
+            }
+            
+            // دکمه موقعیت‌یابی
+            const locateMeBtn = document.getElementById('locateMeBtn');
+            if (locateMeBtn) {
+                locateMeBtn.addEventListener('click', locateUser);
+            }
+            
+            // دکمه بازنشانی نقشه
+            const resetMapBtn = document.getElementById('resetMapBtn');
+            if (resetMapBtn) {
+                resetMapBtn.addEventListener('click', () => {
+                    // حذف همه نشانگرها
+                    if (pickupMarker) {
+                        pickupMarker.remove();
+                        pickupMarker = null;
+                    }
+                    if (destinationMarker) {
+                        destinationMarker.remove();
+                        destinationMarker = null;
+                    }
+                    if (routeLine) {
+                        routeLine.remove();
+                        routeLine = null;
+                    }
+                    
+                    // بازنشانی فیلدها
+                    const pickupInput = document.getElementById('pickup');
+                    const destinationInput = document.getElementById('destination');
+                    if (pickupInput) pickupInput.value = '';
+                    if (destinationInput) destinationInput.value = '';
+                    
+                    // بازنشانی حالت
+                    selectedPickup = null;
+                    selectedDestination = null;
+                    mapMode = 'pickup';
+                    
+                    // مخفی کردن ماشین‌حساب
+                    const tripCalculator = document.getElementById('tripCalculator');
+                    if (tripCalculator) tripCalculator.classList.remove('active');
+                    
+                    showNotification('نقشه بازنشانی شد', 'success');
+                });
+            }
+            
+            // دکمه‌های بزرگنمایی و کوچکنمایی (نمادین)
+            const zoomInBtn = document.getElementById('zoomInBtn');
+            const zoomOutBtn = document.getElementById('zoomOutBtn');
+            
+            if (zoomInBtn) {
+                zoomInBtn.addEventListener('click', () => {
+                    showNotification('بزرگنمایی نقشه', 'warning');
+                });
+            }
+            
+            if (zoomOutBtn) {
+                zoomOutBtn.addEventListener('click', () => {
+                    showNotification('کوچکنمایی نقشه', 'warning');
+                });
+            }
+            
+            // مدیریت اعلان راننده
+            const closeDriverNotification = document.getElementById('closeDriverNotification');
+            const rejectTripBtn = document.getElementById('rejectTripBtn');
+            const acceptTripBtn = document.getElementById('acceptTripBtn');
+            const driverNotification = document.getElementById('driverNotification');
+            
+            if (closeDriverNotification) {
+                closeDriverNotification.addEventListener('click', () => {
+                    if (driverNotification) driverNotification.classList.remove('active');
+                });
+            }
+            
+            if (rejectTripBtn) {
+                rejectTripBtn.addEventListener('click', () => {
+                    if (driverNotification) driverNotification.classList.remove('active');
+                    showNotification('درخواست سفر رد شد', 'warning');
+                    // در حالت واقعی، این درخواست به راننده بعدی ارسال می‌شود
+                });
+            }
+            
+            if (acceptTripBtn) {
+                acceptTripBtn.addEventListener('click', () => {
+                    if (driverNotification) driverNotification.classList.remove('active');
+                    showNotification('درخواست سفر پذیرفته شد', 'success');
+                    // در حالت واقعی، اینجا راننده سفر را می‌پذیرد
+                });
+            }
+            
+            // انتخاب نوع سفر
+            const rideOptions = document.querySelectorAll('.ride-option');
+            rideOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    // حذف کلاس active از همه گزینه‌ها
+                    rideOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // اضافه کردن کلاس active به گزینه انتخاب شده
+                    option.classList.add('active');
+                    
+                    // به‌روزرسانی نوع سفر انتخاب شده
+                    selectedRideType = option.getAttribute('data-type');
+                    
+                    // به‌روزرسانی قیمت
+                    if (currentDistance > 0) {
+                        updatePrice();
+                    }
+                });
+            });
+            
+            // فرم درخواست سفر
+            const rideForm = document.getElementById('rideForm');
+            if (rideForm) {
+                rideForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    if (!currentUser) {
+                        showNotification('لطفاً ابتدا وارد حساب کاربری خود شوید', 'error');
+                        openAuthModal();
+                        return;
+                    }
+                    
+                    const pickupInput = document.getElementById('pickup');
+                    const destinationInput = document.getElementById('destination');
+                    
+                    const pickup = pickupInput?.value;
+                    const destination = destinationInput?.value;
+
+                    if (!pickup || !destination) {
+                        showNotification('لطفاً مبدا و مقصد را وارد کنید', 'error');
+                        return;
+                    }
+
+                    if (pickup === destination) {
+                        showNotification('مبدا و مقصد نمی‌توانند یکسان باشند', 'error');
+                        return;
+                    }
+
+                    if (currentDistance === 0) {
+                        showNotification('لطفاً منتظر بمانید تا مسافت محاسبه شود', 'error');
+                        return;
+                    }
+
+                    // ذخیره سفر در Supabase
+                    const tripData = {
+                        user_id: currentUser.id,
+                        pickup,
+                        destination,
+                        ride_type: selectedRideType,
+                        distance: currentDistance,
+                        price: currentPrice,
+                        status: 'requested',
+                        pickup_location: selectedPickup,
+                        destination_location: selectedDestination,
+                        created_at: new Date().toISOString()
+                    };
+
+                    try {
+                        const tripId = await saveTripToSupabase(tripData);
+                        currentTripId = tripId;
+
+                        showNotification('سفر شما ثبت شد. در حال یافتن راننده...', 'success');
+
+                        // ارسال اعلان به راننده
+                        sendDriverNotification(tripData);
+                        
+                        // شروع جستجو
+                        startDriverSearch();
+                    } catch (error) {
+                        console.error('خطا در ثبت سفر:', error);
+                        showNotification('خطا در ثبت سفر. لطفاً مجدداً تلاش کنید.', 'error');
+                    }
+                });
+            }
+            
+            // فرم ورود
+            const authForm = document.getElementById('authForm');
+            if (authForm) {
+                authForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const phone = document.getElementById('phone').value;
+                    const password = document.getElementById('password').value;
+                    
+                    if (!phone || !password) {
+                        showNotification('لطفاً شماره تماس و رمز عبور را وارد کنید', 'error');
+                        return;
+                    }
+                    
+                    const success = await loginUser(phone, password);
+                    
+                    if (success) {
+                        closeAuthModal();
+                    }
+                });
+            }
+            
+            // بستن مدال‌ها
+            const closeAuthModalBtn = document.getElementById('closeAuthModal');
+            if (closeAuthModalBtn) {
+                closeAuthModalBtn.addEventListener('click', closeAuthModal);
+            }
+            
+            const closeDriverModalBtn = document.getElementById('closeDriverModal');
+            if (closeDriverModalBtn) {
+                closeDriverModalBtn.addEventListener('click', () => {
+                    const driverModal = document.getElementById('driverModal');
+                    if (driverModal) {
+                        driverModal.style.display = 'none';
+                    }
+                });
+            }
+            
+            // تأیید سفر
+            const confirmTripBtn = document.getElementById('confirmTripBtn');
+            if (confirmTripBtn) {
+                confirmTripBtn.addEventListener('click', () => {
+                    const driverModal = document.getElementById('driverModal');
+                    if (driverModal) {
+                        driverModal.style.display = 'none';
+                    }
+                    
+                    showNotification('سفر شما تأیید شد. راننده در راه است.', 'success');
+                    
+                    // در اینجا می‌توانید ردیابی سفر را شروع کنید
+                });
+            }
+            
+            // کلیک خارج از مدال برای بستن آن
+            window.addEventListener('click', (e) => {
+                const authModal = document.getElementById('authModal');
+                const driverModal = document.getElementById('driverModal');
+                
+                if (authModal && e.target === authModal) {
+                    closeAuthModal();
+                }
+                
+                if (driverModal && e.target === driverModal) {
+                    driverModal.style.display = 'none';
+                }
             });
         };
     </script>
