@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اسنپ افغانستان - تاکسی اینترنتی کابل</title>
+    <title>اسنپ افغانستان - سیستم کامل مدیریت تاکسی اینترنتی</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
     <style>
+        /* تمام استایلهای قبلی را حفظ میکنیم */
         * {
             margin: 0;
             padding: 0;
@@ -610,6 +612,49 @@
             z-index: 1;
         }
 
+        /* نشانگرها روی نقشه */
+        .driver-marker {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0, 212, 116, 0.4);
+        }
+
+        .bike-marker {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(255, 101, 132, 0.4);
+        }
+
+        .user-marker {
+            width: 30px;
+            height: 30px;
+            background: var(--gradient-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(26, 26, 46, 0.4);
+        }
+
         /* پنل درخواست سفر */
         .ride-panel {
             background: white;
@@ -953,7 +998,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 100;
         }
 
         .searching-animation {
@@ -1006,7 +1051,7 @@
             border-radius: 20px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
             padding: 20px;
-            z-index: 2000;
+            z-index: 200;
             max-width: 320px;
             border: 1px solid var(--border);
             animation: slideUp 0.3s ease;
@@ -1569,6 +1614,9 @@
         .status-rejected { background: #FFEBEE; color: #D32F2F; }
         .status-active { background: #E8F5E9; color: #388E3C; }
         .status-inactive { background: #F5F5F5; color: #757575; }
+        .status-available { background: #E8F5E9; color: #388E3C; }
+        .status-busy { background: #FFF3E0; color: #EF6C00; }
+        .status-offline { background: #F5F5F5; color: #757575; }
 
         .action-buttons {
             display: flex;
@@ -1598,6 +1646,11 @@
 
         .btn-edit {
             background: var(--gradient-dark);
+            color: white;
+        }
+
+        .btn-view {
+            background: var(--secondary);
             color: white;
         }
 
@@ -2260,6 +2313,40 @@
             font-weight: 500;
         }
 
+        /* فیلترها */
+        .filters {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 150px;
+        }
+
+        .filter-group label {
+            font-size: 13px;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 10px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
         /* فوتر */
         footer {
             background: var(--gradient-dark);
@@ -2386,6 +2473,15 @@
 
             .profile-stats {
                 grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                width: 100%;
             }
         }
 
@@ -2533,83 +2629,6 @@
                 gap: 10px;
             }
         }
-
-        /* استایل‌های نقشه */
-        .leaflet-control-container .leaflet-top {
-            top: 80px;
-        }
-
-        .leaflet-marker-icon {
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-        }
-
-        .driver-marker {
-            background: var(--primary);
-            border: 3px solid white;
-            border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(0, 212, 116, 0.4);
-            animation: pulse 2s infinite;
-        }
-
-        .passenger-marker {
-            background: var(--accent);
-            border: 3px solid white;
-            border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(255, 101, 132, 0.4);
-        }
-
-        .car-icon {
-            background: var(--primary);
-            border-radius: 50%;
-            padding: 5px;
-            color: white;
-            font-size: 16px;
-        }
-
-        .bike-icon {
-            background: var(--secondary);
-            border-radius: 50%;
-            padding: 5px;
-            color: white;
-            font-size: 16px;
-        }
-
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 116, 0.4); }
-            50% { box-shadow: 0 0 0 10px rgba(0, 212, 116, 0); }
-        }
-
-        /* کنترل‌های نقشه سفارشی */
-        .map-controls {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .map-control-btn {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--dark);
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .map-control-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: scale(1.1);
-        }
     </style>
 </head>
 <body>
@@ -2719,20 +2738,9 @@
     <div class="container" style="display: none;" id="main-container">
         <div class="page active" id="home-page">
             <div class="main-content">
-                <!-- نقشه کابل -->
+                <!-- نقشه واقعی کابل -->
                 <div class="map-container">
                     <div id="map"></div>
-                    <div class="map-controls">
-                        <button class="map-control-btn" id="locateMe" title="موقعیت من">
-                            <i class="fas fa-location-arrow"></i>
-                        </button>
-                        <button class="map-control-btn" id="zoomIn" title="بزرگنمایی">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                        <button class="map-control-btn" id="zoomOut" title="کوچکنمایی">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
                     
                     <!-- ردیابی زنده -->
                     <div class="live-tracking" id="liveTracking" style="display: none;">
@@ -3030,32 +3038,32 @@
                 
                 <div class="profile-stats">
                     <div class="profile-stat">
-                        <div class="value" id="totalTripsCount">۱۲</div>
+                        <div class="value" id="totalTripsCount">۰</div>
                         <div class="label">تعداد سفرها</div>
                     </div>
                     <div class="profile-stat">
-                        <div class="value" id="totalSpent">۱,۳۴۰</div>
+                        <div class="value" id="totalSpent">۰</div>
                         <div class="label">افغانی هزینه شده</div>
                     </div>
                     <div class="profile-stat">
-                        <div class="value" id="userRating">۴.۷</div>
+                        <div class="value" id="userRating">۵.۰</div>
                         <div class="label">امتیاز شما</div>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="editName"><i class="fas fa-user"></i> نام کامل</label>
-                    <input type="text" id="editName" class="form-input" value="احمد محمدی">
+                    <input type="text" id="editName" class="form-input">
                 </div>
                 
                 <div class="form-group">
                     <label for="editEmail"><i class="fas fa-envelope"></i> ایمیل</label>
-                    <input type="email" id="editEmail" class="form-input" value="ahmad@example.com">
+                    <input type="email" id="editEmail" class="form-input">
                 </div>
                 
                 <div class="form-group">
                     <label for="editPhone"><i class="fas fa-phone"></i> شماره تماس</label>
-                    <input type="tel" id="editPhone" class="form-input" value="0700111222">
+                    <input type="tel" id="editPhone" class="form-input">
                 </div>
                 
                 <button class="btn btn-primary" id="saveProfile">
@@ -3113,25 +3121,16 @@
                     <i class="fas fa-headset"></i>
                     مدیریت پشتیبانی
                 </div>
-                <div class="admin-tab" data-tab="realtime">
-                    <i class="fas fa-sync"></i>
-                    بروزرسانی Real-time
-                </div>
             </div>
             
+            <!-- مدیریت کاربران -->
             <div class="admin-tab-content active" id="users-tab">
                 <div class="tab-header">
                     <h3>کاربران در انتظار تایید</h3>
-                    <div class="action-buttons">
-                        <button class="btn btn-primary" id="refreshUsersBtn">
-                            <i class="fas fa-sync-alt"></i>
-                            بروزرسانی
-                        </button>
-                        <button class="btn btn-approve" id="exportUsersBtn">
-                            <i class="fas fa-download"></i>
-                            خروجی Excel
-                        </button>
-                    </div>
+                    <button class="btn btn-primary" id="refreshUsersBtn">
+                        <i class="fas fa-sync-alt"></i>
+                        بروزرسانی
+                    </button>
                 </div>
                 <div class="table-container">
                     <table class="data-table">
@@ -3153,10 +3152,45 @@
                 
                 <div class="tab-header" style="margin-top: 40px;">
                     <h3>همه کاربران</h3>
-                    <button class="btn btn-primary" id="exportAllUsersBtn">
-                        <i class="fas fa-download"></i>
-                        خروجی Excel
-                    </button>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="exportUsersBtn">
+                            <i class="fas fa-download"></i>
+                            خروجی Excel
+                        </button>
+                        <button class="btn btn-edit" id="filterUsersBtn">
+                            <i class="fas fa-filter"></i>
+                            فیلتر
+                        </button>
+                    </div>
+                </div>
+                <div class="filters" id="usersFilters" style="display: none;">
+                    <div class="filter-group">
+                        <label>نوع کاربر</label>
+                        <select id="filterUserType">
+                            <option value="">همه</option>
+                            <option value="passenger">مسافر</option>
+                            <option value="driver">راننده</option>
+                            <option value="admin">مدیر</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>وضعیت</label>
+                        <select id="filterUserStatus">
+                            <option value="">همه</option>
+                            <option value="pending">در انتظار تایید</option>
+                            <option value="approved">تایید شده</option>
+                            <option value="rejected">رد شده</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>از تاریخ</label>
+                        <input type="date" id="filterUserDateFrom">
+                    </div>
+                    <div class="filter-group">
+                        <label>تا تاریخ</label>
+                        <input type="date" id="filterUserDateTo">
+                    </div>
+                    <button class="btn btn-primary" id="applyUserFilter">اعمال فیلتر</button>
                 </div>
                 <div class="table-container">
                     <table class="data-table">
@@ -3178,6 +3212,7 @@
                 </div>
             </div>
             
+            <!-- مدیریت رانندگان -->
             <div class="admin-tab-content" id="drivers-tab">
                 <div class="tab-header">
                     <h3>مدیریت رانندگان</h3>
@@ -3186,14 +3221,43 @@
                             <i class="fas fa-user-plus"></i>
                             افزودن راننده جدید
                         </button>
-                        <button class="btn btn-approve" id="exportDriversBtn">
-                            <i class="fas fa-download"></i>
-                            خروجی Excel
-                        </button>
                         <button class="btn btn-edit" id="refreshDriversBtn">
                             <i class="fas fa-sync-alt"></i>
                         </button>
+                        <button class="btn btn-view" id="exportDriversBtn">
+                            <i class="fas fa-download"></i>
+                            خروجی Excel
+                        </button>
                     </div>
+                </div>
+                <div class="filters" id="driversFilters" style="display: none;">
+                    <div class="filter-group">
+                        <label>وضعیت</label>
+                        <select id="filterDriverStatus">
+                            <option value="">همه</option>
+                            <option value="available">آماده به کار</option>
+                            <option value="busy">مشغول</option>
+                            <option value="offline">آفلاین</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>نوع وسیله</label>
+                        <select id="filterVehicleType">
+                            <option value="">همه</option>
+                            <option value="car">خودرو</option>
+                            <option value="bike">موتور</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>حداقل امتیاز</label>
+                        <select id="filterMinRating">
+                            <option value="0">همه</option>
+                            <option value="4">۴ به بالا</option>
+                            <option value="4.5">۴.۵ به بالا</option>
+                            <option value="5">۵</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" id="applyDriverFilter">اعمال فیلتر</button>
                 </div>
                 <div class="table-container">
                     <table class="data-table">
@@ -3205,7 +3269,6 @@
                                 <th>مدل خودرو</th>
                                 <th>پلاک</th>
                                 <th>وضعیت</th>
-                                <th>امتیاز</th>
                                 <th>عملیات</th>
                             </tr>
                         </thead>
@@ -3216,33 +3279,51 @@
                 </div>
             </div>
             
+            <!-- مدیریت سفرها -->
             <div class="admin-tab-content" id="trips-tab">
                 <div class="tab-header">
                     <h3>مدیریت سفرها</h3>
                     <div class="action-buttons">
-                        <div class="form-group" style="display: flex; gap: 10px; align-items: center;">
-                            <input type="date" id="tripFilterDate" class="form-input" style="padding: 10px; width: 200px;">
-                            <select id="tripFilterStatus" class="form-input" style="padding: 10px; width: 150px;">
-                                <option value="">همه وضعیت‌ها</option>
-                                <option value="requested">درخواست شده</option>
-                                <option value="confirmed">تأیید شده</option>
-                                <option value="in_progress">در حال انجام</option>
-                                <option value="completed">تکمیل شده</option>
-                                <option value="cancelled">لغو شده</option>
-                            </select>
-                            <button class="btn btn-primary" id="filterTripsBtn">
-                                <i class="fas fa-filter"></i>
-                                فیلتر
-                            </button>
-                        </div>
-                        <button class="btn btn-approve" id="exportTripsBtn">
+                        <button class="btn btn-primary" id="exportTripsBtn">
                             <i class="fas fa-download"></i>
                             خروجی Excel
                         </button>
-                        <button class="btn btn-edit" id="refreshTripsBtn">
-                            <i class="fas fa-sync-alt"></i>
+                        <button class="btn btn-edit" id="filterTripsBtn">
+                            <i class="fas fa-filter"></i>
+                            فیلتر
                         </button>
                     </div>
+                </div>
+                <div class="filters" id="tripsFilters" style="display: none;">
+                    <div class="filter-group">
+                        <label>وضعیت</label>
+                        <select id="filterTripStatus">
+                            <option value="">همه</option>
+                            <option value="requested">درخواست شده</option>
+                            <option value="confirmed">تأیید شده</option>
+                            <option value="in_progress">در حال سفر</option>
+                            <option value="completed">تکمیل شده</option>
+                            <option value="cancelled">لغو شده</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>نوع سفر</label>
+                        <select id="filterTripType">
+                            <option value="">همه</option>
+                            <option value="economy">اقتصادی</option>
+                            <option value="comfort">کلاسیک</option>
+                            <option value="bike">موتور</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>از تاریخ</label>
+                        <input type="date" id="filterTripDateFrom">
+                    </div>
+                    <div class="filter-group">
+                        <label>تا تاریخ</label>
+                        <input type="date" id="filterTripDateTo">
+                    </div>
+                    <button class="btn btn-primary" id="applyTripFilter">اعمال فیلتر</button>
                 </div>
                 <div class="table-container">
                     <table class="data-table">
@@ -3253,7 +3334,6 @@
                                 <th>راننده</th>
                                 <th>مبدا</th>
                                 <th>مقصد</th>
-                                <th>مسافت</th>
                                 <th>هزینه</th>
                                 <th>وضعیت</th>
                                 <th>عملیات</th>
@@ -3266,6 +3346,7 @@
                 </div>
             </div>
             
+            <!-- مدیریت تخفیفها -->
             <div class="admin-tab-content" id="discounts-tab">
                 <div class="tab-header">
                     <h3>مدیریت تخفیفها</h3>
@@ -3274,14 +3355,31 @@
                             <i class="fas fa-plus-circle"></i>
                             افزودن تخفیف جدید
                         </button>
-                        <button class="btn btn-approve" id="exportDiscountsBtn">
+                        <button class="btn btn-edit" id="exportDiscountsBtn">
                             <i class="fas fa-download"></i>
                             خروجی Excel
                         </button>
-                        <button class="btn btn-edit" id="refreshDiscountsBtn">
-                            <i class="fas fa-sync-alt"></i>
-                        </button>
                     </div>
+                </div>
+                <div class="filters" id="discountsFilters" style="display: none;">
+                    <div class="filter-group">
+                        <label>وضعیت</label>
+                        <select id="filterDiscountStatus">
+                            <option value="">همه</option>
+                            <option value="active">فعال</option>
+                            <option value="expired">منقضی شده</option>
+                            <option value="exhausted">تمام شده</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>از تاریخ انقضا</label>
+                        <input type="date" id="filterDiscountDateFrom">
+                    </div>
+                    <div class="filter-group">
+                        <label>تا تاریخ انقضا</label>
+                        <input type="date" id="filterDiscountDateTo">
+                    </div>
+                    <button class="btn btn-primary" id="applyDiscountFilter">اعمال فیلتر</button>
                 </div>
                 <div class="table-container">
                     <table class="data-table">
@@ -3302,22 +3400,40 @@
                 </div>
             </div>
             
+            <!-- مدیریت پشتیبانی -->
             <div class="admin-tab-content" id="support-tab">
                 <div class="tab-header">
                     <h3>مدیریت درخواستهای پشتیبانی</h3>
                     <div class="action-buttons">
-                        <button class="btn btn-primary" id="markAllReadBtn">
-                            <i class="fas fa-check-double"></i>
-                            علامتگذاری همه
-                        </button>
-                        <button class="btn btn-approve" id="exportSupportBtn">
+                        <button class="btn btn-primary" id="exportSupportBtn">
                             <i class="fas fa-download"></i>
                             خروجی Excel
                         </button>
-                        <button class="btn btn-edit" id="refreshSupportBtn">
-                            <i class="fas fa-sync-alt"></i>
+                        <button class="btn btn-edit" id="filterSupportBtn">
+                            <i class="fas fa-filter"></i>
+                            فیلتر
                         </button>
                     </div>
+                </div>
+                <div class="filters" id="supportFilters" style="display: none;">
+                    <div class="filter-group">
+                        <label>وضعیت</label>
+                        <select id="filterSupportStatus">
+                            <option value="">همه</option>
+                            <option value="pending">در انتظار پاسخ</option>
+                            <option value="answered">پاسخ داده شده</option>
+                            <option value="closed">بسته شده</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>از تاریخ</label>
+                        <input type="date" id="filterSupportDateFrom">
+                    </div>
+                    <div class="filter-group">
+                        <label>تا تاریخ</label>
+                        <input type="date" id="filterSupportDateTo">
+                    </div>
+                    <button class="btn btn-primary" id="applySupportFilter">اعمال فیلتر</button>
                 </div>
                 <div class="table-container">
                     <table class="data-table">
@@ -3335,66 +3451,6 @@
                             <!-- درخواستهای پشتیبانی -->
                         </tbody>
                     </table>
-                </div>
-            </div>
-
-            <div class="admin-tab-content" id="realtime-tab">
-                <div class="tab-header">
-                    <h3>بروزرسانی Real-time</h3>
-                    <div class="action-buttons">
-                        <button class="btn btn-primary" id="startRealtimeBtn">
-                            <i class="fas fa-play"></i>
-                            شروع بروزرسانی
-                        </button>
-                        <button class="btn btn-reject" id="stopRealtimeBtn">
-                            <i class="fas fa-stop"></i>
-                            توقف بروزرسانی
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="realtime-stats" style="margin-top: 30px;">
-                    <div class="admin-stats">
-                        <div class="stat-card">
-                            <h3>رانندگان آنلاین</h3>
-                            <div class="value" id="onlineDrivers">0</div>
-                            <div class="change positive"><i class="fas fa-circle"></i> آنلاین</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>سفرهای فعال</h3>
-                            <div class="value" id="activeTrips">0</div>
-                            <div class="change positive"><i class="fas fa-road"></i> در حال انجام</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>درخواست‌های جدید</h3>
-                            <div class="value" id="newRequests">0</div>
-                            <div class="change positive"><i class="fas fa-clock"></i> در ۵ دقیقه گذشته</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>کاربران فعال</h3>
-                            <div class="value" id="activeUsersRealtime">0</div>
-                            <div class="change positive"><i class="fas fa-users"></i> در حال حاضر</div>
-                        </div>
-                    </div>
-                    
-                    <div class="realtime-updates" style="margin-top: 40px;">
-                        <h3>آخرین بروزرسانی‌ها</h3>
-                        <div class="table-container">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>زمان</th>
-                                        <th>نوع</th>
-                                        <th>توضیحات</th>
-                                        <th>وضعیت</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="realtimeUpdatesTable">
-                                    <!-- بروزرسانی‌های real-time -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -3715,20 +3771,21 @@
             
             <form class="auth-form" id="addDriverForm">
                 <div class="form-group">
-                    <label for="driverNameInput">نام کامل</label>
-                    <input type="text" id="driverNameInput" class="form-input" placeholder="نام کامل راننده" required>
+                    <label for="driverFullName">نام کامل</label>
+                    <input type="text" id="driverFullName" class="form-input" placeholder="نام کامل راننده" required>
                 </div>
                 <div class="form-group">
-                    <label for="driverEmailInput">ایمیل</label>
-                    <input type="email" id="driverEmailInput" class="form-input" placeholder="ایمیل راننده" required>
+                    <label for="driverEmail">ایمیل</label>
+                    <input type="email" id="driverEmail" class="form-input" placeholder="ایمیل راننده" required>
                 </div>
                 <div class="form-group">
-                    <label for="driverPhoneInput">شماره تماس</label>
-                    <input type="tel" id="driverPhoneInput" class="form-input" placeholder="شماره تماس راننده" required>
+                    <label for="driverPhone">شماره تماس</label>
+                    <input type="tel" id="driverPhone" class="form-input" placeholder="شماره تماس راننده" required>
                 </div>
                 <div class="form-group">
-                    <label for="vehicleTypeInput">نوع وسیله</label>
-                    <select id="vehicleTypeInput" class="form-input" required style="padding: 15px 20px;">
+                    <label for="vehicleType">نوع وسیله</label>
+                    <select id="vehicleType" class="form-input" required style="padding: 15px 20px;">
+                        <option value="">انتخاب کنید</option>
                         <option value="car">خودرو</option>
                         <option value="bike">موتور</option>
                     </select>
@@ -3746,8 +3803,8 @@
                     <input type="text" id="plateNumberInput" class="form-input" placeholder="شماره پلاک" required>
                 </div>
                 <div class="form-group">
-                    <label for="driverLicenseInput">شماره گواهینامه</label>
-                    <input type="text" id="driverLicenseInput" class="form-input" placeholder="شماره گواهینامه" required>
+                    <label for="driverLicense">شماره گواهینامه</label>
+                    <input type="text" id="driverLicense" class="form-input" placeholder="شماره گواهینامه" required>
                 </div>
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-plus-circle"></i>
@@ -3767,20 +3824,31 @@
             
             <form class="auth-form" id="addDiscountForm">
                 <div class="form-group">
-                    <label for="discountCodeInput">کد تخفیف</label>
-                    <input type="text" id="discountCodeInput" class="form-input" placeholder="کد تخفیف" required>
+                    <label for="discountCode">کد تخفیف</label>
+                    <input type="text" id="discountCode" class="form-input" placeholder="کد تخفیف" required>
                 </div>
                 <div class="form-group">
-                    <label for="discountPercentInput">درصد تخفیف</label>
-                    <input type="number" id="discountPercentInput" class="form-input" placeholder="درصد تخفیف" min="1" max="100" required>
+                    <label for="discountPercent">درصد تخفیف</label>
+                    <input type="number" id="discountPercent" class="form-input" placeholder="درصد تخفیف" min="1" max="100" required>
                 </div>
                 <div class="form-group">
-                    <label for="discountExpiryInput">تاریخ انقضا</label>
-                    <input type="date" id="discountExpiryInput" class="form-input" required>
+                    <label for="discountExpiry">تاریخ انقضا</label>
+                    <input type="date" id="discountExpiry" class="form-input" required>
                 </div>
                 <div class="form-group">
-                    <label for="maxUsesInput">حداکثر استفاده</label>
-                    <input type="number" id="maxUsesInput" class="form-input" placeholder="حداکثر تعداد استفاده" min="1" required>
+                    <label for="maxUses">حداکثر استفاده</label>
+                    <input type="number" id="maxUses" class="form-input" placeholder="حداکثر تعداد استفاده" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="minAmount">حداقل مبلغ سفارش</label>
+                    <input type="number" id="minAmount" class="form-input" placeholder="حداقل مبلغ سفارش" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="discountType">نوع تخفیف</label>
+                    <select id="discountType" class="form-input" required style="padding: 15px 20px;">
+                        <option value="percentage">درصدی</option>
+                        <option value="fixed">مبلغ ثابت</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-plus-circle"></i>
@@ -3843,12 +3911,12 @@
     </footer>
 
     <script>
-        // اتصال به Supabase
+        // تنظیمات Supabase
         const SUPABASE_URL = 'https://ewzgpfpllwhhrjupqyvy.supabase.co';
         const SUPABASE_KEY = 'sb_secret_muUrFpyuPZkgm2Nd8gbblA_ovzxgAbc';
-
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
         // متغیرهای سیستم
         let currentUser = null;
         let isAdmin = false;
@@ -3860,51 +3928,12 @@
         let currentDriver = null;
         let map = null;
         let userMarker = null;
-        let driverMarker = null;
+        let driverMarkers = [];
         let routeLayer = null;
         let trackingInterval = null;
-        let realtimeSubscription = null;
-        let driverMarkers = {};
-
-        // مختصات نقاط مهم کابل
-        const kabulLocations = {
-            "میدان هوایی بین المللی کابل": [34.5658, 69.2122],
-            "کارته سخی": [34.5333, 69.1667],
-            "کارته چهار": [34.5167, 69.1833],
-            "شهر نو": [34.5300, 69.1700],
-            "دشت برچی": [34.4731, 69.1094],
-            "قلعه نور": [34.5417, 69.1750],
-            "پغمان": [34.5833, 68.9500],
-            "خیرخانه": [34.5500, 69.1167],
-            "قلعه فتح الله": [34.5167, 69.1667],
-            "مکروریان": [34.4667, 69.0833],
-            "سفارت امریکا": [34.5344, 69.1889],
-            "سفارت ایران": [34.5311, 69.1728],
-            "سفارت پاکستان": [34.5250, 69.1806],
-            "سفارت ترکیه": [34.5283, 69.1917],
-            "ارگ ریاست جمهوری": [34.5250, 69.1750],
-            "وزارت امور خارجه": [34.5306, 69.1694],
-            "وزارت داخله": [34.5283, 69.1739],
-            "وزارت دفاع": [34.5258, 69.1778],
-            "بازار کابل": [34.5167, 69.1833],
-            "بازار کارته سخی": [34.5333, 69.1667],
-            "بازار شورا": [34.5233, 69.1767],
-            "پوهنتون کابل": [34.5167, 69.1333],
-            "پوهنتون پولی تخنیک کابل": [34.4700, 69.1170],
-            "پوهنتون ابن سینا": [34.5133, 69.1667],
-            "شفاخانه علی آباد": [34.5317, 69.1844],
-            "شفاخانه جمهوریت": [34.5200, 69.1750],
-            "شفاخانه ایندیانا": [34.5150, 69.1800]
-        };
-
-        // مناطق کابل
-        const kabulDistricts = [
-            "کارته سخی", "کارته چهار", "شهر نو", "دشت برچی", "قلعه نور",
-            "قلعه فتح الله", "پغمان", "مکروریان", "خیرخانه", "قلعه ذوالفقار",
-            "چندول", "ده سبز", "افشار", "قره باغ", "بگرامی", "نادر پشته",
-            "کارته پروان", "کارته منصور", "کارته خوشحال", "کارته سید"
-        ];
-
+        let districts = [];
+        let popularDestinations = [];
+        
         // توابع کمکی
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
@@ -3916,7 +3945,7 @@
                 notification.style.display = 'none';
             }, 5000);
         }
-
+        
         function clearErrors() {
             document.querySelectorAll('.error-message').forEach(el => {
                 el.style.display = 'none';
@@ -3925,7 +3954,7 @@
                 el.style.borderColor = 'var(--border)';
             });
         }
-
+        
         function showError(inputId, message) {
             const errorElement = document.getElementById(inputId + 'Error');
             const inputElement = document.getElementById(inputId);
@@ -3936,383 +3965,287 @@
                 inputElement.style.borderColor = 'var(--accent)';
             }
         }
-
-        // محاسبه مسافت دقیق با استفاده از فرمول Haversine
-        function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // شعاع زمین در کیلومتر
-            const dLat = toRad(lat2 - lat1);
-            const dLon = toRad(lon2 - lon1);
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                     Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-                     Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c; // فاصله در کیلومتر
-        }
-
-        function toRad(degrees) {
-            return degrees * (Math.PI / 180);
-        }
-
-        // تبدیل درجه به رادیان برای محاسبات مثلثاتی
-        function deg2rad(deg) {
-            return deg * (Math.PI / 180);
-        }
-
-        // گرفتن مختصات از نام مکان
-        async function getCoordinates(locationName) {
-            if (kabulLocations[locationName]) {
-                return kabulLocations[locationName];
-            }
-            
-            // اگر مکان در لیست نبود، از Nominatim استفاده می‌کنیم
-            try {
-                const response = await fetch(
-                    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationName + ', Kabul, Afghanistan')}`
-                );
-                const data = await response.json();
-                
-                if (data && data.length > 0) {
-                    return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-                }
-            } catch (error) {
-                console.error('Error getting coordinates:', error);
-            }
-            
-            // در صورت عدم موفقیت، مختصات مرکز کابل
-            return [34.5553, 69.2075];
-        }
-
-        // محاسبه مسافت و قیمت
-        async function calculateDistanceAndPrice() {
-            const pickupInput = document.getElementById('pickup');
-            const destinationInput = document.getElementById('destination');
-            const tripCalculator = document.getElementById('tripCalculator');
-            
-            if (!pickupInput || !destinationInput || !tripCalculator) return;
-            
-            const pickup = pickupInput.value.trim();
-            const destination = destinationInput.value.trim();
-
-            if (!pickup || !destination) {
-                tripCalculator.classList.remove('active');
-                return;
-            }
-
-            try {
-                const pickupCoords = await getCoordinates(pickup);
-                const destinationCoords = await getCoordinates(destination);
-                
-                currentDistance = calculateDistance(
-                    pickupCoords[0], pickupCoords[1],
-                    destinationCoords[0], destinationCoords[1]
-                );
-                
-                // رسم مسیر روی نقشه
-                drawRouteOnMap(pickupCoords, destinationCoords);
-                
-                // نمایش معلومات مسافت
-                const distanceValue = document.getElementById('distanceValue');
-                if (distanceValue) distanceValue.textContent = `${currentDistance.toFixed(2)} کیلومتر`;
-                
-                tripCalculator.classList.add('active');
-                updatePrice();
-            } catch (error) {
-                console.error('Error calculating distance:', error);
-                showNotification('خطا در محاسبه مسافت. لطفاً آدرس‌ها را بررسی کنید.', 'error');
-            }
-        }
-
-        function updatePrice() {
-            if (currentDistance === 0) return;
-
-            const selectedRide = document.querySelector('.ride-type.selected');
-            if (!selectedRide) return;
-            
-            const baseFare = parseInt(selectedRide.dataset.baseFare);
-            const distanceFare = Math.round(currentDistance * 15); // 15 افغانی به ازای هر کیلومتر
-            const totalFare = baseFare + distanceFare;
-
-            currentPrice = totalFare;
-
-            // نمایش جزئیات قیمت
-            const baseFareValue = document.getElementById('baseFareValue');
-            const distanceFareValue = document.getElementById('distanceFareValue');
-            const totalFareValue = document.getElementById('totalFareValue');
-            
-            if (baseFareValue) baseFareValue.textContent = `${baseFare} افغانی`;
-            if (distanceFareValue) distanceFareValue.textContent = `${distanceFare} افغانی`;
-            if (totalFareValue) totalFareValue.textContent = `${totalFare} افغانی`;
-
-            // بهروزرسانی قیمت در کارتها
-            const economyPrice = document.getElementById('economyPrice');
-            const comfortPrice = document.getElementById('comfortPrice');
-            const bikePrice = document.getElementById('bikePrice');
-            
-            if (economyPrice) economyPrice.textContent = `${calculateRidePrice('economy')} افغانی`;
-            if (comfortPrice) comfortPrice.textContent = `${calculateRidePrice('comfort')} افغانی`;
-            if (bikePrice) bikePrice.textContent = `${calculateRidePrice('bike')} افغانی`;
-        }
-
-        function calculateRidePrice(type) {
-            const baseFares = {
-                economy: 50,
-                comfort: 80,
-                bike: 30
-            };
-            return baseFares[type] + Math.round(currentDistance * 15);
-        }
-
+        
         // مدیریت نقشه
-        function initMap() {
+        async function initMap() {
             if (map) return;
             
-            // ایجاد نقشه با مرکزیت کابل
-            map = L.map('map').setView([34.5553, 69.2075], 13);
-            
-            // اضافه کردن لایه OpenStreetMap
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors',
-                maxZoom: 19
-            }).addTo(map);
-            
-            // اضافه کردن نقاط مهم
-            addImportantLocations();
-            addDistrictControls();
-        }
-
-        function addImportantLocations() {
-            Object.entries(kabulLocations).forEach(([name, coords]) => {
-                const marker = L.marker(coords).addTo(map);
-                marker.bindPopup(`<b>${name}</b>`);
-                
-                marker.on('click', () => {
-                    const pickupInput = document.getElementById('pickup');
-                    const destinationInput = document.getElementById('destination');
-                    
-                    if (!pickupInput || !destinationInput) return;
-                    
-                    if (!pickupInput.value) {
-                        pickupInput.value = name;
-                        showNotification(`مبدا به "${name}" تنظیم شد`, 'info');
-                    } else if (!destinationInput.value) {
-                        destinationInput.value = name;
-                        showNotification(`مقصد به "${name}" تنظیم شد`, 'info');
-                    } else {
-                        if (confirm(`آیا میخواهید "${name}" را به عنوان مقصد انتخاب کنید؟`)) {
-                            destinationInput.value = name;
-                            showNotification(`مقصد به "${name}" تنظیم شد`, 'info');
-                        }
-                    }
-                    calculateDistanceAndPrice();
-                });
-            });
-        }
-
-        function addDistrictControls() {
-            const districtsGrid = document.getElementById('districtsGrid');
-            if (!districtsGrid) return;
-            
-            districtsGrid.innerHTML = '';
-            
-            kabulDistricts.forEach(district => {
-                const districtItem = document.createElement('div');
-                districtItem.className = 'district-item';
-                districtItem.textContent = district;
-                
-                districtItem.addEventListener('click', () => {
-                    const pickupInput = document.getElementById('pickup');
-                    const destinationInput = document.getElementById('destination');
-                    
-                    if (!pickupInput || !destinationInput) return;
-                    
-                    if (!pickupInput.value) {
-                        pickupInput.value = district;
-                        showNotification(`مبدا به "${district}" تنظیم شد`, 'info');
-                    } else if (!destinationInput.value) {
-                        destinationInput.value = district;
-                        showNotification(`مقصد به "${district}" تنظیم شد`, 'info');
-                    } else {
-                        if (confirm(`آیا میخواهید "${district}" را به عنوان مقصد انتخاب کنید؟`)) {
-                            destinationInput.value = district;
-                            showNotification(`مقصد به "${district}" تنظیم شد`, 'info');
-                        }
-                    }
-                    calculateDistanceAndPrice();
-                });
-                
-                districtsGrid.appendChild(districtItem);
-            });
-        }
-
-        // رسم مسیر روی نقشه
-        function drawRouteOnMap(startCoords, endCoords) {
-            // پاک کردن مسیر قبلی
-            if (routeLayer) {
-                map.removeLayer(routeLayer);
-            }
-            
-            // رسم خط مسیر
-            routeLayer = L.polyline([startCoords, endCoords], {
-                color: '#00D474',
-                weight: 4,
-                opacity: 0.8,
-                dashArray: '10, 10'
-            }).addTo(map);
-            
-            // اضافه کردن نشانگر مبدا
-            if (userMarker) {
-                map.removeLayer(userMarker);
-            }
-            
-            userMarker = L.marker(startCoords, {
-                icon: L.divIcon({
-                    className: 'passenger-marker',
-                    html: '<i class="fas fa-user"></i>',
-                    iconSize: [30, 30]
-                })
-            }).addTo(map);
-            userMarker.bindPopup('مبدا').openPopup();
-            
-            // اضافه کردن نشانگر مقصد
-            const destinationMarker = L.marker(endCoords, {
-                icon: L.divIcon({
-                    className: 'location-marker',
-                    html: '<i class="fas fa-flag-checkered"></i>',
-                    iconSize: [30, 30]
-                })
-            }).addTo(map);
-            destinationMarker.bindPopup('مقصد');
-            
-            // تنظیم دید نقشه برای نمایش کل مسیر
-            const bounds = L.latLngBounds([startCoords, endCoords]);
-            map.fitBounds(bounds, { padding: [50, 50] });
-        }
-
-        // مدیریت رانندگان روی نقشه
-        async function updateDriversOnMap() {
             try {
-                const { data: drivers, error } = await supabase
+                // موقعیت کابل
+                const kabulPosition = [34.5553, 69.2075];
+                
+                map = L.map('map').setView(kabulPosition, 12);
+                
+                // اضافه کردن نقشه OpenStreetMap
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors',
+                    maxZoom: 18
+                }).addTo(map);
+                
+                // بارگذاری مناطق کابل از Supabase
+                await loadDistricts();
+                
+                // بارگذاری مقاصد پرطرفدار
+                await loadPopularDestinations();
+                
+                // بارگذاری رانندگان فعال
+                await loadActiveDrivers();
+                
+                // تنظیم event listener برای کلیک روی نقشه
+                map.on('click', function(e) {
+                    const pickupInput = document.getElementById('pickup');
+                    if (pickupInput && !pickupInput.value) {
+                        reverseGeocode(e.latlng.lat, e.latlng.lng, pickupInput);
+                    }
+                });
+                
+                showNotification('نقشه کابل با موفقیت بارگذاری شد', 'success');
+            } catch (error) {
+                console.error('Error initializing map:', error);
+                showNotification('خطا در بارگذاری نقشه', 'error');
+            }
+        }
+        
+        // تبدیل مختصات به آدرس
+        async function reverseGeocode(lat, lng, inputElement) {
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+                const data = await response.json();
+                
+                if (data.display_name) {
+                    inputElement.value = data.display_name;
+                    showNotification('آدرس انتخاب شد', 'info');
+                }
+            } catch (error) {
+                console.error('Error in reverse geocoding:', error);
+                inputElement.value = `موقعیت جغرافیایی: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+            }
+        }
+        
+        // محاسبه دقیق مسافت بین دو نقطه
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // شعاع زمین به کیلومتر
+            const dLat = toRad(lat2 - lat1);
+            const dLon = toRad(lon2 - lon1);
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c; // مسافت به کیلومتر
+        }
+        
+        function toRad(value) {
+            return value * Math.PI / 180;
+        }
+        
+        // بارگذاری مناطق کابل از Supabase
+        async function loadDistricts() {
+            try {
+                const { data, error } = await supabase
+                    .from('districts')
+                    .select('*')
+                    .order('name', { ascending: true });
+                
+                if (error) throw error;
+                
+                districts = data || [];
+                
+                // نمایش مناطق در پنل
+                const districtsGrid = document.getElementById('districtsGrid');
+                if (districtsGrid) {
+                    districtsGrid.innerHTML = '';
+                    
+                    districts.forEach(district => {
+                        const districtElement = document.createElement('div');
+                        districtElement.className = 'district-item';
+                        districtElement.textContent = district.name;
+                        districtElement.title = district.description || district.name;
+                        
+                        districtElement.addEventListener('click', () => {
+                            const pickupInput = document.getElementById('pickup');
+                            if (pickupInput) {
+                                pickupInput.value = district.name;
+                                showNotification(`منطقه "${district.name}" انتخاب شد`, 'info');
+                                
+                                // مرکزیت نقشه روی منطقه انتخاب شده
+                                if (district.latitude && district.longitude) {
+                                    map.setView([district.latitude, district.longitude], 14);
+                                }
+                            }
+                        });
+                        
+                        districtsGrid.appendChild(districtElement);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading districts:', error);
+                showNotification('خطا در بارگذاری مناطق', 'error');
+            }
+        }
+        
+        // بارگذاری مقاصد پرطرفدار
+        async function loadPopularDestinations() {
+            try {
+                const { data, error } = await supabase
+                    .from('popular_destinations')
+                    .select('*')
+                    .order('visit_count', { ascending: false })
+                    .limit(6);
+                
+                if (error) throw error;
+                
+                popularDestinations = data || [];
+                
+                // اضافه کردن نشانگرها روی نقشه
+                popularDestinations.forEach(destination => {
+                    if (destination.latitude && destination.longitude) {
+                        const marker = L.marker([destination.latitude, destination.longitude])
+                            .addTo(map)
+                            .bindPopup(`
+                                <b>${destination.name}</b><br>
+                                ${destination.description || ''}<br>
+                                <small>${destination.visit_count || 0} بازدید</small>
+                            `);
+                        
+                        marker.on('click', () => {
+                            const destinationInput = document.getElementById('destination');
+                            if (destinationInput) {
+                                destinationInput.value = destination.name;
+                                showNotification(`مقصد "${destination.name}" انتخاب شد`, 'info');
+                            }
+                        });
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading popular destinations:', error);
+            }
+        }
+        
+        // بارگذاری رانندگان فعال
+        async function loadActiveDrivers() {
+            try {
+                const { data, error } = await supabase
                     .from('drivers')
                     .select('*')
-                    .eq('status', 'active')
+                    .eq('status', 'available')
                     .eq('is_online', true);
                 
                 if (error) throw error;
                 
-                // پاک کردن مارکرهای قبلی
-                Object.values(driverMarkers).forEach(marker => {
-                    if (marker) map.removeLayer(marker);
-                });
-                driverMarkers = {};
+                // پاک کردن نشانگرهای قبلی
+                driverMarkers.forEach(marker => map.removeLayer(marker));
+                driverMarkers = [];
                 
-                // اضافه کردن رانندگان جدید
-                drivers.forEach(driver => {
-                    if (driver.current_location) {
-                        const coords = [
-                            driver.current_location.latitude,
-                            driver.current_location.longitude
-                        ];
+                // اضافه کردن نشانگرهای جدید
+                data.forEach(driver => {
+                    if (driver.latitude && driver.longitude) {
+                        const icon = L.divIcon({
+                            className: 'driver-icon',
+                            html: `<div class="${driver.vehicle_type === 'bike' ? 'bike-marker' : 'driver-marker'}">
+                                ${driver.name.charAt(0)}
+                            </div>`,
+                            iconSize: [40, 40],
+                            iconAnchor: [20, 20]
+                        });
                         
-                        const iconClass = driver.vehicle_type === 'bike' ? 'bike-icon' : 'car-icon';
-                        const iconHtml = driver.vehicle_type === 'bike' ? 
-                            '<i class="fas fa-motorcycle"></i>' : 
-                            '<i class="fas fa-car"></i>';
+                        const marker = L.marker([driver.latitude, driver.longitude], { icon })
+                            .addTo(map)
+                            .bindPopup(`
+                                <b>${driver.name}</b><br>
+                                ${driver.vehicle_type === 'car' ? 'خودرو' : 'موتور'}: ${driver.vehicle_model || ''}<br>
+                                امتیاز: ${driver.rating || 'جدید'}<br>
+                                <button class="action-btn btn-primary" onclick="selectDriver('${driver.id}')">انتخاب</button>
+                            `);
                         
-                        const marker = L.marker(coords, {
-                            icon: L.divIcon({
-                                className: iconClass,
-                                html: iconHtml,
-                                iconSize: [30, 30]
-                            })
-                        }).addTo(map);
-                        
-                        marker.bindPopup(`
-                            <b>${driver.name}</b><br>
-                            ${driver.vehicle_type === 'car' ? 'خودرو' : 'موتور'}<br>
-                            ${driver.car_model || ''}<br>
-                            امتیاز: ${driver.rating || 'جدید'}
-                        `);
-                        
-                        driverMarkers[driver.id] = marker;
+                        driverMarkers.push(marker);
                     }
                 });
             } catch (error) {
-                console.error('Error updating drivers on map:', error);
+                console.error('Error loading active drivers:', error);
             }
         }
-
-        // سیستم احراز هویت
-        async function loginUser(email, password) {
+        
+        // انتخاب راننده
+        async function selectDriver(driverId) {
             try {
                 const { data, error } = await supabase
-                    .from('users')
+                    .from('drivers')
                     .select('*')
-                    .or(`email.eq.${email},phone.eq.${email}`)
+                    .eq('id', driverId)
                     .single();
                 
                 if (error) throw error;
                 
-                // بررسی رمز عبور (در پروژه واقعی باید از رمزنگاری استفاده شود)
-                if (data.password !== password) {
-                    throw new Error('رمز عبور اشتباه است');
-                }
+                currentDriver = data;
                 
-                if (data.status !== 'approved') {
-                    throw new Error('حساب کاربری شما هنوز تایید نشده است');
-                }
+                // نمایش مدال راننده
+                document.getElementById('driverAvatar').textContent = currentDriver.name.charAt(0);
+                document.getElementById('driverName').textContent = currentDriver.name;
+                document.getElementById('driverRating').textContent = currentDriver.rating || 'جدید';
+                document.getElementById('carModel').textContent = currentDriver.vehicle_model || '---';
+                document.getElementById('carColor').textContent = currentDriver.vehicle_color || '---';
+                document.getElementById('plateNumber').textContent = currentDriver.license_plate || '---';
+                
+                // محاسبه زمان و مسافت
+                const userLocation = map.getCenter();
+                const driverLocation = [currentDriver.latitude, currentDriver.longitude];
+                const distance = calculateDistance(
+                    userLocation.lat, userLocation.lng,
+                    driverLocation[0], driverLocation[1]
+                );
+                
+                const eta = Math.max(2, Math.round(distance * 3)); // فرض: 3 دقیقه به ازای هر کیلومتر
+                
+                document.getElementById('eta').textContent = `${eta} دقیقه`;
+                document.getElementById('distance').textContent = `${distance.toFixed(1)} کیلومتر`;
+                document.getElementById('price').textContent = `${currentPrice} افغانی`;
+                
+                document.getElementById('driverModal').style.display = 'flex';
+                showNotification(`راننده ${currentDriver.name} انتخاب شد`, 'success');
+                
+            } catch (error) {
+                console.error('Error selecting driver:', error);
+                showNotification('خطا در انتخاب راننده', 'error');
+            }
+        }
+        
+        // مدیریت کاربران
+        async function checkUserLoginStatus() {
+            const { data: { session }, error } = await supabase.auth.getSession();
+            
+            if (error) {
+                console.error('Error getting session:', error);
+                return;
+            }
+            
+            if (session) {
+                await loadUserProfile(session.user.id);
+            }
+        }
+        
+        async function loadUserProfile(userId) {
+            try {
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('id', userId)
+                    .single();
+                
+                if (error) throw error;
                 
                 currentUser = data;
                 isAdmin = currentUser.role === 'admin';
-                localStorage.setItem('snapp_current_user', JSON.stringify(currentUser));
                 
-                showNotification(`خوش آمدید ${currentUser.name}`, 'success');
                 updateUIAfterLogin();
-                return true;
+                showNotification(`خوش آمدید ${currentUser.name}`, 'success');
+                
             } catch (error) {
-                console.error('Login error:', error);
-                showNotification(error.message, 'error');
-                return false;
+                console.error('Error loading user profile:', error);
+                logout();
             }
         }
-
-        async function registerUser(userData) {
-            try {
-                // بررسی تکراری نبودن ایمیل و شماره تماس
-                const { data: existingUsers, error: checkError } = await supabase
-                    .from('users')
-                    .select('*')
-                    .or(`email.eq.${userData.email},phone.eq.${userData.phone}`);
-                
-                if (checkError) throw checkError;
-                
-                if (existingUsers.length > 0) {
-                    throw new Error('ایمیل یا شماره تماس قبلاً ثبت شده است');
-                }
-                
-                // ثبت کاربر جدید
-                const { data, error } = await supabase
-                    .from('users')
-                    .insert([{
-                        ...userData,
-                        status: 'pending',
-                        wallet_balance: 0,
-                        rating: 0,
-                        created_at: new Date().toISOString()
-                    }])
-                    .select()
-                    .single();
-                
-                if (error) throw error;
-                
-                showNotification('ثبتنام شما با موفقیت انجام شد. پس از تایید مدیر میتوانید وارد شوید.', 'success');
-                return true;
-            } catch (error) {
-                console.error('Registration error:', error);
-                showNotification(error.message, 'error');
-                return false;
-            }
-        }
-
+        
         function updateUIAfterLogin() {
             const loginBtn = document.getElementById('loginBtn');
             const logoutBtn = document.getElementById('logoutBtn');
@@ -4344,7 +4277,22 @@
             
             updateProfilePage();
         }
-
+        
+        async function logout() {
+            const { error } = await supabase.auth.signOut();
+            
+            if (error) {
+                console.error('Error signing out:', error);
+                return;
+            }
+            
+            currentUser = null;
+            isAdmin = false;
+            
+            updateUIAfterLogout();
+            showNotification('با موفقیت خارج شدید', 'success');
+        }
+        
         function updateUIAfterLogout() {
             const loginBtn = document.getElementById('loginBtn');
             const logoutBtn = document.getElementById('logoutBtn');
@@ -4367,256 +4315,46 @@
             const homePage = document.getElementById('home-page');
             if (homePage) homePage.classList.add('active');
         }
-
-        async function logout() {
-            if (currentUser) {
-                // آفلاین کردن راننده در صورت نیاز
-                if (currentUser.role === 'driver') {
-                    await supabase
-                        .from('drivers')
-                        .update({ is_online: false })
-                        .eq('user_id', currentUser.id);
-                }
-            }
-            
-            currentUser = null;
-            isAdmin = false;
-            localStorage.removeItem('snapp_current_user');
-            showNotification('با موفقیت خارج شدید', 'success');
-            updateUIAfterLogout();
-        }
-
+        
         // مدیریت سفر
-        async function createTrip(tripData) {
+        async function createTrip(pickup, destination, rideType, price) {
             try {
+                if (!currentUser) {
+                    showNotification('لطفاً ابتدا وارد حساب کاربری خود شوید', 'error');
+                    openAuthModal();
+                    return null;
+                }
+                
+                const tripData = {
+                    user_id: currentUser.id,
+                    pickup_location: pickup,
+                    destination: destination,
+                    ride_type: rideType,
+                    estimated_price: price,
+                    status: 'requested',
+                    payment_method: selectedPaymentMethod
+                };
+                
                 const { data, error } = await supabase
                     .from('trips')
-                    .insert([{
-                        ...tripData,
-                        status: 'requested',
-                        created_at: new Date().toISOString()
-                    }])
+                    .insert([tripData])
                     .select()
                     .single();
                 
                 if (error) throw error;
                 
                 currentTripId = data.id;
+                showNotification('سفر شما ثبت شد. در حال یافتن راننده...', 'info');
+                
                 return data;
+                
             } catch (error) {
                 console.error('Error creating trip:', error);
-                throw error;
-            }
-        }
-
-        async function findNearestDriver(pickupCoords, rideType) {
-            try {
-                const { data: drivers, error } = await supabase
-                    .from('drivers')
-                    .select('*')
-                    .eq('status', 'active')
-                    .eq('is_online', true)
-                    .eq('vehicle_type', rideType === 'bike' ? 'bike' : 'car');
-                
-                if (error) throw error;
-                
-                if (drivers.length === 0) {
-                    return null;
-                }
-                
-                // محاسبه فاصله هر راننده از مبدا
-                const driversWithDistance = drivers.map(driver => {
-                    if (!driver.current_location) {
-                        driver.distance = Infinity;
-                        return driver;
-                    }
-                    
-                    const driverCoords = [
-                        driver.current_location.latitude,
-                        driver.current_location.longitude
-                    ];
-                    
-                    const distance = calculateDistance(
-                        pickupCoords[0], pickupCoords[1],
-                        driverCoords[0], driverCoords[1]
-                    );
-                    
-                    return {
-                        ...driver,
-                        distance,
-                        eta: Math.max(2, Math.round(distance * 3)) // تخمین زمان بر اساس مسافت
-                    };
-                });
-                
-                // مرتب‌سازی بر اساس فاصله
-                driversWithDistance.sort((a, b) => a.distance - b.distance);
-                
-                return driversWithDistance[0];
-            } catch (error) {
-                console.error('Error finding nearest driver:', error);
+                showNotification('خطا در ثبت سفر', 'error');
                 return null;
             }
         }
-
-        // سیستم Real-time با Supabase
-        function setupRealtimeUpdates() {
-            // لغو سابسکریپشن قبلی
-            if (realtimeSubscription) {
-                supabase.removeSubscription(realtimeSubscription);
-            }
-            
-            // سابسکریپشن برای سفرها
-            realtimeSubscription = supabase
-                .channel('trips-channel')
-                .on('postgres_changes', 
-                    { event: '*', schema: 'public', table: 'trips' },
-                    (payload) => {
-                        console.log('Trip update:', payload);
-                        handleTripUpdate(payload);
-                    }
-                )
-                .on('postgres_changes',
-                    { event: '*', schema: 'public', table: 'drivers' },
-                    (payload) => {
-                        console.log('Driver update:', payload);
-                        handleDriverUpdate(payload);
-                    }
-                )
-                .subscribe();
-        }
-
-        function handleTripUpdate(payload) {
-            const { eventType, new: newData, old: oldData } = payload;
-            
-            if (eventType === 'INSERT') {
-                // سفر جدید اضافه شده
-                showNotification(`سفر جدید از ${newData.pickup} به ${newData.destination}`, 'info');
-                
-                if (isAdmin) {
-                    loadAdminTrips();
-                    updateRealtimeStats();
-                }
-            } else if (eventType === 'UPDATE') {
-                // سفر آپدیت شده
-                if (newData.status !== oldData.status) {
-                    const statusText = {
-                        'requested': 'درخواست شده',
-                        'confirmed': 'تأیید شده',
-                        'in_progress': 'در حال انجام',
-                        'completed': 'تکمیل شده',
-                        'cancelled': 'لغو شده'
-                    }[newData.status] || newData.status;
-                    
-                    showNotification(`وضعیت سفر به "${statusText}" تغییر کرد`, 'info');
-                    
-                    if (currentTripId === newData.id && newData.status === 'in_progress') {
-                        startTripTracking(newData);
-                    }
-                }
-                
-                if (isAdmin) {
-                    loadAdminTrips();
-                    updateRealtimeStats();
-                }
-            }
-        }
-
-        function handleDriverUpdate(payload) {
-            const { eventType, new: newData } = payload;
-            
-            if (eventType === 'UPDATE' && newData.is_online !== undefined) {
-                updateDriversOnMap();
-                
-                if (isAdmin) {
-                    updateRealtimeStats();
-                }
-            }
-        }
-
-        async function updateRealtimeStats() {
-            if (!isAdmin) return;
-            
-            try {
-                // تعداد رانندگان آنلاین
-                const { data: onlineDrivers, error: driversError } = await supabase
-                    .from('drivers')
-                    .select('id', { count: 'exact' })
-                    .eq('is_online', true)
-                    .eq('status', 'active');
-                
-                if (!driversError && onlineDrivers) {
-                    document.getElementById('onlineDrivers').textContent = onlineDrivers.length;
-                }
-                
-                // تعداد سفرهای فعال
-                const { data: activeTrips, error: tripsError } = await supabase
-                    .from('trips')
-                    .select('id', { count: 'exact' })
-                    .eq('status', 'in_progress');
-                
-                if (!tripsError && activeTrips) {
-                    document.getElementById('activeTrips').textContent = activeTrips.length;
-                }
-                
-                // تعداد درخواست‌های جدید در ۵ دقیقه گذشته
-                const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
-                const { data: newRequests, error: requestsError } = await supabase
-                    .from('trips')
-                    .select('id', { count: 'exact' })
-                    .gte('created_at', fiveMinutesAgo)
-                    .eq('status', 'requested');
-                
-                if (!requestsError && newRequests) {
-                    document.getElementById('newRequests').textContent = newRequests.length;
-                }
-                
-                // اضافه کردن به جدول بروزرسانی‌ها
-                const updatesTable = document.getElementById('realtimeUpdatesTable');
-                if (updatesTable) {
-                    const newRow = document.createElement('tr');
-                    newRow.innerHTML = `
-                        <td>${new Date().toLocaleTimeString('fa-IR')}</td>
-                        <td>${onlineDrivers ? 'رانندگان آنلاین' : 'آمار سیستم'}</td>
-                        <td>بروزرسانی آمار سیستم</td>
-                        <td><span class="status-badge status-active">موفق</span></td>
-                    `;
-                    updatesTable.insertBefore(newRow, updatesTable.firstChild);
-                    
-                    // حفظ فقط ۱۰ رکورد آخر
-                    while (updatesTable.children.length > 10) {
-                        updatesTable.removeChild(updatesTable.lastChild);
-                    }
-                }
-                
-            } catch (error) {
-                console.error('Error updating realtime stats:', error);
-            }
-        }
-
-        // شروع ردیابی سفر
-        function startTripTracking(tripData) {
-            const liveTracking = document.getElementById('liveTracking');
-            if (liveTracking) liveTracking.style.display = 'block';
-            
-            document.getElementById('trackingDriverName').textContent = tripData.driver_name || 'راننده';
-            document.getElementById('trackingETA').textContent = `${tripData.eta || 5} دقیقه`;
-            document.getElementById('trackingDistance').textContent = `${tripData.distance || 0} کیلومتر`;
-            
-            let progress = 0;
-            trackingInterval = setInterval(() => {
-                progress += 5;
-                if (progress > 100) progress = 100;
-                
-                document.getElementById('trackingProgress').style.width = `${progress}%`;
-                
-                if (progress >= 100) {
-                    clearInterval(trackingInterval);
-                    showNotification('شما به مقصد رسیدید!', 'success');
-                    openRatingModal();
-                }
-            }, 3000);
-        }
-
+        
         // مدیریت پنل ادمین
         async function loadAdminPanel() {
             if (!isAdmin) {
@@ -4626,77 +4364,58 @@
                 return;
             }
             
-            try {
-                await Promise.all([
-                    loadAdminStats(),
-                    loadPendingUsers(),
-                    loadAllUsers(),
-                    loadDrivers(),
-                    loadAdminTrips(),
-                    loadAdminDiscounts(),
-                    loadAdminSupport()
-                ]);
-                
-                // راه‌اندازی بروزرسانی Real-time
-                setupRealtimeUpdates();
-                startRealtimeUpdates();
-                
-            } catch (error) {
-                console.error('Error loading admin panel:', error);
-                showNotification('خطا در بارگذاری پنل مدیریت', 'error');
-            }
+            await loadAdminStats();
+            await loadPendingUsers();
+            await loadAllUsers();
+            await loadDrivers();
+            await loadAdminTrips();
+            await loadAdminDiscounts();
+            await loadAdminSupport();
         }
-
+        
         async function loadAdminStats() {
             try {
-                // تعداد سفرها
-                const { data: trips, error: tripsError } = await supabase
+                // تعداد کل سفرها
+                const { count: totalTrips } = await supabase
                     .from('trips')
-                    .select('id', { count: 'exact' });
+                    .select('*', { count: 'exact', head: true });
                 
-                if (!tripsError && trips) {
-                    document.getElementById('totalTrips').textContent = trips.length;
-                }
+                // کاربران فعال (لاگین در 24 ساعت گذشته)
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
                 
-                // کاربران فعال
-                const { data: users, error: usersError } = await supabase
+                const { count: activeUsers } = await supabase
                     .from('users')
-                    .select('id', { count: 'exact' })
-                    .eq('status', 'approved');
+                    .select('*', { count: 'exact', head: true })
+                    .gte('last_login', yesterday.toISOString());
                 
-                if (!usersError && users) {
-                    document.getElementById('activeUsers').textContent = users.length;
-                }
-                
-                // رانندگان
-                const { data: drivers, error: driversError } = await supabase
+                // تعداد رانندگان
+                const { count: totalDrivers } = await supabase
                     .from('drivers')
-                    .select('id', { count: 'exact' })
-                    .eq('status', 'active');
-                
-                if (!driversError && drivers) {
-                    document.getElementById('totalDrivers').textContent = drivers.length;
-                }
+                    .select('*', { count: 'exact', head: true });
                 
                 // درآمد کل
-                const { data: revenueData, error: revenueError } = await supabase
+                const { data: revenueData } = await supabase
                     .from('trips')
-                    .select('price')
+                    .select('final_price')
                     .eq('status', 'completed');
                 
-                if (!revenueError && revenueData) {
-                    const totalRevenue = revenueData.reduce((sum, trip) => sum + (trip.price || 0), 0);
-                    document.getElementById('totalRevenue').textContent = `${totalRevenue} افغانی`;
-                }
+                const totalRevenue = revenueData?.reduce((sum, trip) => sum + (trip.final_price || 0), 0) || 0;
+                
+                // به روزرسانی UI
+                document.getElementById('totalTrips').textContent = totalTrips || 0;
+                document.getElementById('activeUsers').textContent = activeUsers || 0;
+                document.getElementById('totalDrivers').textContent = totalDrivers || 0;
+                document.getElementById('totalRevenue').textContent = `${totalRevenue} افغانی`;
                 
             } catch (error) {
                 console.error('Error loading admin stats:', error);
             }
         }
-
+        
         async function loadPendingUsers() {
             try {
-                const { data: users, error } = await supabase
+                const { data, error } = await supabase
                     .from('users')
                     .select('*')
                     .eq('status', 'pending')
@@ -4704,13 +4423,13 @@
                 
                 if (error) throw error;
                 
-                const pendingUsersTable = document.getElementById('pendingUsersTable');
-                if (!pendingUsersTable) return;
+                const table = document.getElementById('pendingUsersTable');
+                if (!table) return;
                 
-                pendingUsersTable.innerHTML = '';
+                table.innerHTML = '';
                 
-                if (users.length === 0) {
-                    pendingUsersTable.innerHTML = `
+                if (!data || data.length === 0) {
+                    table.innerHTML = `
                         <tr>
                             <td colspan="6" style="text-align: center; padding: 20px; color: var(--gray);">
                                 هیچ کاربری در انتظار تایید نیست
@@ -4720,10 +4439,10 @@
                     return;
                 }
                 
-                users.forEach(user => {
+                data.forEach(user => {
                     const row = document.createElement('tr');
                     const date = new Date(user.created_at).toLocaleDateString('fa-IR');
-                    const roleText = user.role === 'passenger' ? 'مسافر' : 'راننده';
+                    const roleText = user.role === 'passenger' ? 'مسافر' : user.role === 'driver' ? 'راننده' : 'مدیر';
                     
                     row.innerHTML = `
                         <td>${user.name}</td>
@@ -4737,68 +4456,30 @@
                         </td>
                     `;
                     
-                    pendingUsersTable.appendChild(row);
+                    table.appendChild(row);
                 });
                 
             } catch (error) {
                 console.error('Error loading pending users:', error);
             }
         }
-
-        async function approveUser(userId) {
-            try {
-                const { error } = await supabase
-                    .from('users')
-                    .update({ status: 'approved' })
-                    .eq('id', userId);
-                
-                if (error) throw error;
-                
-                showNotification('کاربر با موفقیت تایید شد', 'success');
-                loadPendingUsers();
-                loadAllUsers();
-                
-            } catch (error) {
-                console.error('Error approving user:', error);
-                showNotification('خطا در تایید کاربر', 'error');
-            }
-        }
-
-        async function rejectUser(userId) {
-            try {
-                const { error } = await supabase
-                    .from('users')
-                    .update({ status: 'rejected' })
-                    .eq('id', userId);
-                
-                if (error) throw error;
-                
-                showNotification('کاربر رد شد', 'success');
-                loadPendingUsers();
-                loadAllUsers();
-                
-            } catch (error) {
-                console.error('Error rejecting user:', error);
-                showNotification('خطا در رد کاربر', 'error');
-            }
-        }
-
+        
         async function loadAllUsers() {
             try {
-                const { data: users, error } = await supabase
+                const { data, error } = await supabase
                     .from('users')
                     .select('*')
                     .order('created_at', { ascending: false });
                 
                 if (error) throw error;
                 
-                const allUsersTable = document.getElementById('allUsersTable');
-                if (!allUsersTable) return;
+                const table = document.getElementById('allUsersTable');
+                if (!table) return;
                 
-                allUsersTable.innerHTML = '';
+                table.innerHTML = '';
                 
-                if (users.length === 0) {
-                    allUsersTable.innerHTML = `
+                if (!data || data.length === 0) {
+                    table.innerHTML = `
                         <tr>
                             <td colspan="7" style="text-align: center; padding: 20px; color: var(--gray);">
                                 هیچ کاربری ثبت نشده است
@@ -4808,15 +4489,16 @@
                     return;
                 }
                 
-                users.forEach(user => {
+                data.forEach(user => {
                     const row = document.createElement('tr');
                     const date = new Date(user.created_at).toLocaleDateString('fa-IR');
-                    const roleText = user.role === 'passenger' ? 'مسافر' : 'راننده';
+                    const roleText = user.role === 'passenger' ? 'مسافر' : user.role === 'driver' ? 'راننده' : 'مدیر';
                     const statusClass = `status-${user.status}`;
                     const statusText = {
                         'pending': 'در انتظار تایید',
                         'approved': 'تایید شده',
-                        'rejected': 'رد شده'
+                        'rejected': 'رد شده',
+                        'suspended': 'معلق شده'
                     }[user.status] || user.status;
                     
                     row.innerHTML = `
@@ -4827,23 +4509,45 @@
                         <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                         <td>${date}</td>
                         <td class="action-buttons">
-                            ${user.status === 'approved' ? 
-                              `<button class="action-btn btn-reject" onclick="deactivateUser('${user.id}')">غیرفعال</button>` : 
-                              user.status === 'rejected' ? 
-                              `<button class="action-btn btn-approve" onclick="activateUser('${user.id}')">فعال</button>` : ''}
+                            ${user.status !== 'approved' ? 
+                              `<button class="action-btn btn-approve" onclick="approveUser('${user.id}')">تایید</button>` : 
+                              `<button class="action-btn btn-reject" onclick="suspendUser('${user.id}')">معلق</button>`}
                             <button class="action-btn btn-reject" onclick="deleteUser('${user.id}')">حذف</button>
                         </td>
                     `;
                     
-                    allUsersTable.appendChild(row);
+                    table.appendChild(row);
                 });
                 
             } catch (error) {
                 console.error('Error loading all users:', error);
             }
         }
-
-        async function deactivateUser(userId) {
+        
+        async function approveUser(userId) {
+            if (!confirm('آیا از تایید این کاربر اطمینان دارید؟')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('users')
+                    .update({ status: 'approved', approved_at: new Date().toISOString() })
+                    .eq('id', userId);
+                
+                if (error) throw error;
+                
+                showNotification('کاربر با موفقیت تایید شد', 'success');
+                await loadPendingUsers();
+                await loadAllUsers();
+                
+            } catch (error) {
+                console.error('Error approving user:', error);
+                showNotification('خطا در تایید کاربر', 'error');
+            }
+        }
+        
+        async function rejectUser(userId) {
+            if (!confirm('آیا از رد این کاربر اطمینان دارید؟')) return;
+            
             try {
                 const { error } = await supabase
                     .from('users')
@@ -4852,35 +4556,38 @@
                 
                 if (error) throw error;
                 
-                showNotification('کاربر غیرفعال شد', 'success');
-                loadAllUsers();
+                showNotification('کاربر با موفقیت رد شد', 'success');
+                await loadPendingUsers();
+                await loadAllUsers();
                 
             } catch (error) {
-                console.error('Error deactivating user:', error);
-                showNotification('خطا در غیرفعال کردن کاربر', 'error');
+                console.error('Error rejecting user:', error);
+                showNotification('خطا در رد کاربر', 'error');
             }
         }
-
-        async function activateUser(userId) {
+        
+        async function suspendUser(userId) {
+            if (!confirm('آیا از تعلیق این کاربر اطمینان دارید؟')) return;
+            
             try {
                 const { error } = await supabase
                     .from('users')
-                    .update({ status: 'approved' })
+                    .update({ status: 'suspended' })
                     .eq('id', userId);
                 
                 if (error) throw error;
                 
-                showNotification('کاربر فعال شد', 'success');
-                loadAllUsers();
+                showNotification('کاربر با موفقیت معلق شد', 'success');
+                await loadAllUsers();
                 
             } catch (error) {
-                console.error('Error activating user:', error);
-                showNotification('خطا در فعال کردن کاربر', 'error');
+                console.error('Error suspending user:', error);
+                showNotification('خطا در تعلیق کاربر', 'error');
             }
         }
-
+        
         async function deleteUser(userId) {
-            if (!confirm('آیا از حذف این کاربر مطمئن هستید؟')) return;
+            if (!confirm('آیا از حذف این کاربر اطمینان دارید؟ این عمل قابل بازگشت نیست.')) return;
             
             try {
                 const { error } = await supabase
@@ -4890,33 +4597,37 @@
                 
                 if (error) throw error;
                 
-                showNotification('کاربر حذف شد', 'success');
-                loadAllUsers();
+                showNotification('کاربر با موفقیت حذف شد', 'success');
+                await loadAllUsers();
                 
             } catch (error) {
                 console.error('Error deleting user:', error);
                 showNotification('خطا در حذف کاربر', 'error');
             }
         }
-
+        
+        // مدیریت رانندگان
         async function loadDrivers() {
             try {
-                const { data: drivers, error } = await supabase
+                const { data, error } = await supabase
                     .from('drivers')
-                    .select('*')
+                    .select(`
+                        *,
+                        users:user_id (name, email, phone)
+                    `)
                     .order('created_at', { ascending: false });
                 
                 if (error) throw error;
                 
-                const driversTable = document.getElementById('driversTable');
-                if (!driversTable) return;
+                const table = document.getElementById('driversTable');
+                if (!table) return;
                 
-                driversTable.innerHTML = '';
+                table.innerHTML = '';
                 
-                if (drivers.length === 0) {
-                    driversTable.innerHTML = `
+                if (!data || data.length === 0) {
+                    table.innerHTML = `
                         <tr>
-                            <td colspan="8" style="text-align: center; padding: 20px; color: var(--gray);">
+                            <td colspan="7" style="text-align: center; padding: 20px; color: var(--gray);">
                                 هیچ رانندهای ثبت نشده است
                             </td>
                         </tr>
@@ -4924,57 +4635,66 @@
                     return;
                 }
                 
-                drivers.forEach(driver => {
+                data.forEach(driver => {
                     const row = document.createElement('tr');
-                    const vehicleType = driver.vehicle_type || 'car';
-                    const vehicleTypeText = vehicleType === 'car' ? 'خودرو' : 'موتور';
-                    const statusClass = driver.status === 'active' ? 'status-active' : 'status-inactive';
-                    const statusText = driver.status === 'active' ? 'فعال' : 'غیرفعال';
+                    const vehicleType = driver.vehicle_type === 'car' ? 'خودرو' : 'موتور';
+                    const statusClass = `status-${driver.status}`;
+                    const statusText = {
+                        'available': 'آماده به کار',
+                        'busy': 'مشغول',
+                        'offline': 'آفلاین'
+                    }[driver.status] || driver.status;
                     
                     row.innerHTML = `
-                        <td>${driver.name}</td>
-                        <td>${driver.phone}</td>
-                        <td>${vehicleTypeText}</td>
-                        <td>${driver.car_model || '---'}</td>
-                        <td>${driver.plate_number || '---'}</td>
+                        <td>${driver.users?.name || '---'}</td>
+                        <td>${driver.users?.phone || '---'}</td>
+                        <td>${vehicleType}</td>
+                        <td>${driver.vehicle_model || '---'}</td>
+                        <td>${driver.license_plate || '---'}</td>
                         <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                        <td>${driver.rating || 'جدید'}</td>
                         <td class="action-buttons">
-                            <button class="action-btn ${driver.status === 'active' ? 'btn-reject' : 'btn-approve'}" onclick="toggleDriverStatus('${driver.id}', ${driver.status === 'active'})">
-                                ${driver.status === 'active' ? 'غیرفعال' : 'فعال'}
+                            <button class="action-btn ${driver.status === 'available' ? 'btn-reject' : 'btn-approve'}" 
+                                onclick="toggleDriverStatus('${driver.id}', '${driver.status}')">
+                                ${driver.status === 'available' ? 'غیرفعال' : 'فعال'}
                             </button>
                             <button class="action-btn btn-reject" onclick="deleteDriver('${driver.id}')">حذف</button>
                         </td>
                     `;
                     
-                    driversTable.appendChild(row);
+                    table.appendChild(row);
                 });
                 
             } catch (error) {
                 console.error('Error loading drivers:', error);
             }
         }
-
-        async function toggleDriverStatus(driverId, isActive) {
+        
+        async function toggleDriverStatus(driverId, currentStatus) {
+            const newStatus = currentStatus === 'available' ? 'offline' : 'available';
+            const actionText = newStatus === 'available' ? 'فعال' : 'غیرفعال';
+            
+            if (!confirm(`آیا از ${actionText} کردن این راننده اطمینان دارید؟`)) return;
+            
             try {
                 const { error } = await supabase
                     .from('drivers')
-                    .update({ status: isActive ? 'inactive' : 'active' })
+                    .update({ status: newStatus })
                     .eq('id', driverId);
                 
                 if (error) throw error;
                 
-                showNotification(`راننده ${isActive ? 'غیرفعال' : 'فعال'} شد`, 'success');
-                loadDrivers();
+                showNotification(`راننده با موفقیت ${actionText} شد`, 'success');
+                await loadDrivers();
+                await loadActiveDrivers();
                 
             } catch (error) {
                 console.error('Error toggling driver status:', error);
                 showNotification('خطا در تغییر وضعیت راننده', 'error');
             }
         }
-
+        
         async function deleteDriver(driverId) {
-            if (!confirm('آیا از حذف این راننده مطمئن هستید؟')) return;
+            if (!confirm('آیا از حذف این راننده اطمینان دارید؟ این عمل قابل بازگشت نیست.')) return;
             
             try {
                 const { error } = await supabase
@@ -4984,37 +4704,39 @@
                 
                 if (error) throw error;
                 
-                showNotification('راننده حذف شد', 'success');
-                loadDrivers();
+                showNotification('راننده با موفقیت حذف شد', 'success');
+                await loadDrivers();
+                await loadActiveDrivers();
                 
             } catch (error) {
                 console.error('Error deleting driver:', error);
                 showNotification('خطا در حذف راننده', 'error');
             }
         }
-
+        
+        // مدیریت سفرها
         async function loadAdminTrips() {
             try {
-                const { data: trips, error } = await supabase
+                const { data, error } = await supabase
                     .from('trips')
                     .select(`
                         *,
-                        passenger:users!trips_user_id_fkey(name),
-                        driver:drivers!trips_driver_id_fkey(name)
+                        users:user_id (name),
+                        drivers:driver_id (name)
                     `)
                     .order('created_at', { ascending: false });
                 
                 if (error) throw error;
                 
-                const adminTripsTable = document.getElementById('adminTripsTable');
-                if (!adminTripsTable) return;
+                const table = document.getElementById('adminTripsTable');
+                if (!table) return;
                 
-                adminTripsTable.innerHTML = '';
+                table.innerHTML = '';
                 
-                if (trips.length === 0) {
-                    adminTripsTable.innerHTML = `
+                if (!data || data.length === 0) {
+                    table.innerHTML = `
                         <tr>
-                            <td colspan="9" style="text-align: center; padding: 20px; color: var(--gray);">
+                            <td colspan="8" style="text-align: center; padding: 20px; color: var(--gray);">
                                 هیچ سفری ثبت نشده است
                             </td>
                         </tr>
@@ -5022,98 +4744,159 @@
                     return;
                 }
                 
-                trips.forEach(trip => {
+                data.forEach(trip => {
                     const row = document.createElement('tr');
                     const date = new Date(trip.created_at).toLocaleDateString('fa-IR');
                     const statusClass = `status-${trip.status}`;
                     const statusText = {
                         'requested': 'درخواست شده',
                         'confirmed': 'تأیید شده',
-                        'in_progress': 'در حال انجام',
+                        'in_progress': 'در حال سفر',
                         'completed': 'تکمیل شده',
                         'cancelled': 'لغو شده'
                     }[trip.status] || trip.status;
                     
+                    const rideTypeText = {
+                        'economy': 'اقتصادی',
+                        'comfort': 'کلاسیک',
+                        'bike': 'موتور'
+                    }[trip.ride_type] || trip.ride_type;
+                    
                     row.innerHTML = `
                         <td>${date}</td>
-                        <td>${trip.passenger?.name || '---'}</td>
-                        <td>${trip.driver?.name || '---'}</td>
-                        <td>${trip.pickup}</td>
+                        <td>${trip.users?.name || '---'}</td>
+                        <td>${trip.drivers?.name || '---'}</td>
+                        <td>${trip.pickup_location}</td>
                         <td>${trip.destination}</td>
-                        <td>${trip.distance ? trip.distance.toFixed(2) + ' کیلومتر' : '---'}</td>
-                        <td>${trip.price ? trip.price + ' افغانی' : '---'}</td>
+                        <td>${trip.final_price || trip.estimated_price || 0} افغانی</td>
                         <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                         <td class="action-buttons">
-                            ${trip.status === 'requested' || trip.status === 'confirmed' ? 
-                              `<button class="action-btn btn-reject" onclick="cancelTrip('${trip.id}')">لغو سفر</button>` : ''}
-                            <button class="action-btn btn-reject" onclick="deleteTrip('${trip.id}')">حذف</button>
+                            ${trip.status === 'requested' ? 
+                              `<button class="action-btn btn-approve" onclick="assignDriverToTrip('${trip.id}')">تخصیص راننده</button>` : ''}
+                            ${trip.status !== 'completed' && trip.status !== 'cancelled' ? 
+                              `<button class="action-btn btn-reject" onclick="cancelTrip('${trip.id}')">لغو</button>` : ''}
+                            <button class="action-btn btn-view" onclick="viewTripDetails('${trip.id}')">جزئیات</button>
                         </td>
                     `;
                     
-                    adminTripsTable.appendChild(row);
+                    table.appendChild(row);
                 });
                 
             } catch (error) {
                 console.error('Error loading admin trips:', error);
             }
         }
-
-        async function cancelTrip(tripId) {
-            if (!confirm('آیا از لغو این سفر مطمئن هستید؟')) return;
-            
+        
+        async function assignDriverToTrip(tripId) {
             try {
-                const { error } = await supabase
+                // پیدا کردن رانندگان در دسترس
+                const { data: availableDrivers, error: driversError } = await supabase
+                    .from('drivers')
+                    .select('*')
+                    .eq('status', 'available')
+                    .eq('is_online', true);
+                
+                if (driversError) throw driversError;
+                
+                if (!availableDrivers || availableDrivers.length === 0) {
+                    showNotification('هیچ راننده در دسترسی موجود نیست', 'warning');
+                    return;
+                }
+                
+                // انتخاب تصادفی یک راننده
+                const randomDriver = availableDrivers[Math.floor(Math.random() * availableDrivers.length)];
+                
+                // به روزرسانی سفر
+                const { error: tripError } = await supabase
                     .from('trips')
-                    .update({ status: 'cancelled' })
+                    .update({
+                        driver_id: randomDriver.id,
+                        status: 'confirmed',
+                        confirmed_at: new Date().toISOString()
+                    })
                     .eq('id', tripId);
                 
-                if (error) throw error;
+                if (tripError) throw tripError;
                 
-                showNotification('سفر لغو شد', 'success');
-                loadAdminTrips();
+                // به روزرسانی وضعیت راننده
+                const { error: driverError } = await supabase
+                    .from('drivers')
+                    .update({ status: 'busy' })
+                    .eq('id', randomDriver.id);
+                
+                if (driverError) throw driverError;
+                
+                showNotification(`راننده ${randomDriver.name} به سفر تخصیص داده شد`, 'success');
+                await loadAdminTrips();
+                await loadActiveDrivers();
+                
+            } catch (error) {
+                console.error('Error assigning driver:', error);
+                showNotification('خطا در تخصیص راننده', 'error');
+            }
+        }
+        
+        async function cancelTrip(tripId) {
+            if (!confirm('آیا از لغو این سفر اطمینان دارید؟')) return;
+            
+            try {
+                // دریافت اطلاعات سفر
+                const { data: trip, error: tripError } = await supabase
+                    .from('trips')
+                    .select('driver_id')
+                    .eq('id', tripId)
+                    .single();
+                
+                if (tripError) throw tripError;
+                
+                // لغو سفر
+                const { error: cancelError } = await supabase
+                    .from('trips')
+                    .update({
+                        status: 'cancelled',
+                        cancelled_at: new Date().toISOString()
+                    })
+                    .eq('id', tripId);
+                
+                if (cancelError) throw cancelError;
+                
+                // اگر راننده داشت، وضعیتش را به آماده تغییر دهیم
+                if (trip.driver_id) {
+                    const { error: driverError } = await supabase
+                        .from('drivers')
+                        .update({ status: 'available' })
+                        .eq('id', trip.driver_id);
+                    
+                    if (driverError) throw driverError;
+                }
+                
+                showNotification('سفر با موفقیت لغو شد', 'success');
+                await loadAdminTrips();
+                await loadActiveDrivers();
                 
             } catch (error) {
                 console.error('Error cancelling trip:', error);
                 showNotification('خطا در لغو سفر', 'error');
             }
         }
-
-        async function deleteTrip(tripId) {
-            if (!confirm('آیا از حذف این سفر مطمئن هستید؟')) return;
-            
-            try {
-                const { error } = await supabase
-                    .from('trips')
-                    .delete()
-                    .eq('id', tripId);
-                
-                if (error) throw error;
-                
-                showNotification('سفر حذف شد', 'success');
-                loadAdminTrips();
-                
-            } catch (error) {
-                console.error('Error deleting trip:', error);
-                showNotification('خطا در حذف سفر', 'error');
-            }
-        }
-
+        
+        // مدیریت تخفیفها
         async function loadAdminDiscounts() {
             try {
-                const { data: discounts, error } = await supabase
+                const { data, error } = await supabase
                     .from('discounts')
                     .select('*')
                     .order('created_at', { ascending: false });
                 
                 if (error) throw error;
                 
-                const discountsTable = document.getElementById('discountsTable');
-                if (!discountsTable) return;
+                const table = document.getElementById('discountsTable');
+                if (!table) return;
                 
-                discountsTable.innerHTML = '';
+                table.innerHTML = '';
                 
-                if (discounts.length === 0) {
-                    discountsTable.innerHTML = `
+                if (!data || data.length === 0) {
+                    table.innerHTML = `
                         <tr>
                             <td colspan="6" style="text-align: center; padding: 20px; color: var(--gray);">
                                 هیچ تخفیفی ثبت نشده است
@@ -5123,15 +4906,30 @@
                     return;
                 }
                 
-                discounts.forEach(discount => {
+                data.forEach(discount => {
                     const row = document.createElement('tr');
                     const expiryDate = new Date(discount.expiry_date).toLocaleDateString('fa-IR');
-                    const statusClass = new Date(discount.expiry_date) > new Date() ? 'status-active' : 'status-inactive';
-                    const statusText = new Date(discount.expiry_date) > new Date() ? 'فعال' : 'منقضی';
+                    
+                    // تعیین وضعیت تخفیف
+                    let status = 'active';
+                    let statusText = 'فعال';
+                    
+                    const now = new Date();
+                    const expiry = new Date(discount.expiry_date);
+                    
+                    if (expiry < now) {
+                        status = 'expired';
+                        statusText = 'منقضی شده';
+                    } else if (discount.used_count >= discount.max_uses) {
+                        status = 'exhausted';
+                        statusText = 'تمام شده';
+                    }
+                    
+                    const statusClass = `status-${status}`;
                     
                     row.innerHTML = `
                         <td>${discount.code}</td>
-                        <td>${discount.percent}%</td>
+                        <td>${discount.discount_percent || discount.discount_amount || 0}%</td>
                         <td>${expiryDate}</td>
                         <td>${discount.used_count || 0} / ${discount.max_uses}</td>
                         <td><span class="status-badge ${statusClass}">${statusText}</span></td>
@@ -5140,16 +4938,16 @@
                         </td>
                     `;
                     
-                    discountsTable.appendChild(row);
+                    table.appendChild(row);
                 });
                 
             } catch (error) {
-                console.error('Error loading admin discounts:', error);
+                console.error('Error loading discounts:', error);
             }
         }
-
+        
         async function deleteDiscount(discountId) {
-            if (!confirm('آیا از حذف این تخفیف مطمئن هستید؟')) return;
+            if (!confirm('آیا از حذف این تخفیف اطمینان دارید؟ این عمل قابل بازگشت نیست.')) return;
             
             try {
                 const { error } = await supabase
@@ -5159,34 +4957,35 @@
                 
                 if (error) throw error;
                 
-                showNotification('تخفیف حذف شد', 'success');
-                loadAdminDiscounts();
+                showNotification('تخفیف با موفقیت حذف شد', 'success');
+                await loadAdminDiscounts();
                 
             } catch (error) {
                 console.error('Error deleting discount:', error);
                 showNotification('خطا در حذف تخفیف', 'error');
             }
         }
-
+        
+        // مدیریت پشتیبانی
         async function loadAdminSupport() {
             try {
-                const { data: tickets, error } = await supabase
+                const { data, error } = await supabase
                     .from('support_tickets')
                     .select(`
                         *,
-                        user:users!support_tickets_user_id_fkey(name)
+                        users:user_id (name)
                     `)
                     .order('created_at', { ascending: false });
                 
                 if (error) throw error;
                 
-                const adminSupportTable = document.getElementById('adminSupportTable');
-                if (!adminSupportTable) return;
+                const table = document.getElementById('adminSupportTable');
+                if (!table) return;
                 
-                adminSupportTable.innerHTML = '';
+                table.innerHTML = '';
                 
-                if (tickets.length === 0) {
-                    adminSupportTable.innerHTML = `
+                if (!data || data.length === 0) {
+                    table.innerHTML = `
                         <tr>
                             <td colspan="6" style="text-align: center; padding: 20px; color: var(--gray);">
                                 هیچ درخواست پشتیبانی ثبت نشده است
@@ -5196,7 +4995,7 @@
                     return;
                 }
                 
-                tickets.forEach(ticket => {
+                data.forEach(ticket => {
                     const row = document.createElement('tr');
                     const date = new Date(ticket.created_at).toLocaleDateString('fa-IR');
                     const statusClass = `status-${ticket.status}`;
@@ -5207,144 +5006,173 @@
                     }[ticket.status] || ticket.status;
                     
                     row.innerHTML = `
-                        <td>${ticket.user?.name || '---'}</td>
+                        <td>${ticket.users?.name || '---'}</td>
                         <td>${ticket.subject}</td>
                         <td>${ticket.message.length > 50 ? ticket.message.substring(0, 50) + '...' : ticket.message}</td>
                         <td>${date}</td>
                         <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                         <td class="action-buttons">
-                            ${ticket.status !== 'closed' ? 
-                              `<button class="action-btn btn-approve" onclick="answerTicket('${ticket.id}')">پاسخ</button>` : ''}
-                            <button class="action-btn btn-reject" onclick="${ticket.status === 'closed' ? `deleteTicket('${ticket.id}')` : `closeTicket('${ticket.id}')`}">
+                            ${ticket.status === 'pending' ? 
+                              `<button class="action-btn btn-approve" onclick="replyToTicket('${ticket.id}')">پاسخ</button>` : ''}
+                            <button class="action-btn ${ticket.status === 'closed' ? 'btn-reject' : 'btn-edit'}" 
+                                onclick="${ticket.status === 'closed' ? `deleteTicket('${ticket.id}')` : `closeTicket('${ticket.id}')`}">
                                 ${ticket.status === 'closed' ? 'حذف' : 'بستن'}
                             </button>
                         </td>
                     `;
                     
-                    adminSupportTable.appendChild(row);
+                    table.appendChild(row);
                 });
                 
             } catch (error) {
-                console.error('Error loading admin support:', error);
+                console.error('Error loading support tickets:', error);
             }
         }
-
-        async function answerTicket(ticketId) {
-            const answer = prompt('پاسخ خود را وارد کنید:');
-            if (!answer) return;
-            
-            try {
-                const { error } = await supabase
-                    .from('support_tickets')
-                    .update({ 
-                        reply: answer,
-                        status: 'answered',
-                        replied_at: new Date().toISOString()
-                    })
-                    .eq('id', ticketId);
-                
-                if (error) throw error;
-                
-                showNotification('پاسخ ارسال شد', 'success');
-                loadAdminSupport();
-                
-            } catch (error) {
-                console.error('Error answering ticket:', error);
-                showNotification('خطا در ارسال پاسخ', 'error');
-            }
-        }
-
-        async function closeTicket(ticketId) {
-            try {
-                const { error } = await supabase
-                    .from('support_tickets')
-                    .update({ status: 'closed' })
-                    .eq('id', ticketId);
-                
-                if (error) throw error;
-                
-                showNotification('تیکت بسته شد', 'success');
-                loadAdminSupport();
-                
-            } catch (error) {
-                console.error('Error closing ticket:', error);
-                showNotification('خطا در بستن تیکت', 'error');
-            }
-        }
-
-        async function deleteTicket(ticketId) {
-            if (!confirm('آیا از حذف این تیکت مطمئن هستید؟')) return;
-            
-            try {
-                const { error } = await supabase
-                    .from('support_tickets')
-                    .delete()
-                    .eq('id', ticketId);
-                
-                if (error) throw error;
-                
-                showNotification('تیکت حذف شد', 'success');
-                loadAdminSupport();
-                
-            } catch (error) {
-                console.error('Error deleting ticket:', error);
-                showNotification('خطا در حذف تیکت', 'error');
-            }
-        }
-
+        
         // خروجی Excel
-        async function exportToExcel(tableId, filename) {
-            const table = document.getElementById(tableId);
-            if (!table) return;
-            
-            const ws = XLSX.utils.table_to_sheet(table);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-            
-            XLSX.writeFile(wb, `${filename}_${new Date().toISOString().split('T')[0]}.xlsx`);
-            showNotification('فایل Excel با موفقیت دانلود شد', 'success');
-        }
-
-        function startRealtimeUpdates() {
-            // آپدیت آمار هر 10 ثانیه
-            if (isAdmin) {
-                updateRealtimeStats();
-                setInterval(updateRealtimeStats, 10000);
+        async function exportToExcel(tableId, fileName) {
+            try {
+                const table = document.getElementById(tableId);
+                if (!table) {
+                    showNotification('جدول مورد نظر یافت نشد', 'error');
+                    return;
+                }
+                
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('Data');
+                
+                // اضافه کردن هدرها
+                const headers = [];
+                table.querySelectorAll('th').forEach(th => {
+                    headers.push(th.textContent);
+                });
+                worksheet.addRow(headers);
+                
+                // اضافه کردن داده‌ها
+                table.querySelectorAll('tbody tr').forEach(tr => {
+                    const rowData = [];
+                    tr.querySelectorAll('td').forEach(td => {
+                        // حذف دکمه‌های عملیات از خروجی
+                        if (!td.classList.contains('action-buttons')) {
+                            rowData.push(td.textContent);
+                        }
+                    });
+                    worksheet.addRow(rowData);
+                });
+                
+                // استایل‌دهی به هدر
+                const headerRow = worksheet.getRow(1);
+                headerRow.eachCell(cell => {
+                    cell.font = { bold: true };
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'FF00D474' }
+                    };
+                    cell.alignment = { horizontal: 'right' };
+                });
+                
+                // تنظیم عرض ستون‌ها
+                worksheet.columns.forEach(column => {
+                    let maxLength = 0;
+                    column.eachCell({ includeEmpty: true }, cell => {
+                        const columnLength = cell.value ? cell.value.toString().length : 10;
+                        if (columnLength > maxLength) {
+                            maxLength = columnLength;
+                        }
+                    });
+                    column.width = Math.min(maxLength + 2, 30);
+                });
+                
+                // تولید فایل
+                const buffer = await workbook.xlsx.writeBuffer();
+                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                saveAs(blob, `${fileName}_${new Date().toISOString().split('T')[0]}.xlsx`);
+                
+                showNotification('فایل Excel با موفقیت تولید شد', 'success');
+                
+            } catch (error) {
+                console.error('Error exporting to Excel:', error);
+                showNotification('خطا در تولید فایل Excel', 'error');
             }
-            
-            // آپدیت رانندگان روی نقشه هر 30 ثانیه
-            updateDriversOnMap();
-            setInterval(updateDriversOnMap, 30000);
         }
-
+        
+        // به روزرسانی Real-time با Supabase
+        function setupRealtimeSubscriptions() {
+            // سابسکریپشن برای سفرهای جدید
+            const tripsSubscription = supabase
+                .channel('trips-channel')
+                .on('postgres_changes', 
+                    { event: 'INSERT', schema: 'public', table: 'trips' },
+                    (payload) => {
+                        if (currentUser && currentUser.role === 'admin') {
+                            loadAdminTrips();
+                            loadAdminStats();
+                        }
+                    }
+                )
+                .subscribe();
+            
+            // سابسکریپشن برای تغییر وضعیت رانندگان
+            const driversSubscription = supabase
+                .channel('drivers-channel')
+                .on('postgres_changes',
+                    { event: 'UPDATE', schema: 'public', table: 'drivers' },
+                    (payload) => {
+                        loadActiveDrivers();
+                        if (currentUser && currentUser.role === 'admin') {
+                            loadDrivers();
+                        }
+                    }
+                )
+                .subscribe();
+            
+            // سابسکریپشن برای کاربران
+            const usersSubscription = supabase
+                .channel('users-channel')
+                .on('postgres_changes',
+                    { event: '*', schema: 'public', table: 'users' },
+                    (payload) => {
+                        if (currentUser && currentUser.role === 'admin') {
+                            loadPendingUsers();
+                            loadAllUsers();
+                            loadAdminStats();
+                        }
+                    }
+                )
+                .subscribe();
+        }
+        
         // Event Listeners
-        document.addEventListener('DOMContentLoaded', function() {
+        window.onload = async function() {
+            // بررسی وضعیت ورود کاربر
+            await checkUserLoginStatus();
+            
+            // تنظیم سابسکریپشن‌های Real-time
+            setupRealtimeSubscriptions();
+            
             // دکمه شروع استفاده
-            document.getElementById('start-using-btn').addEventListener('click', () => {
+            document.getElementById('start-using-btn').addEventListener('click', async () => {
                 document.getElementById('welcome-page').style.display = 'none';
                 document.getElementById('main-header').style.display = 'block';
                 document.getElementById('main-container').style.display = 'block';
                 document.getElementById('main-footer').style.display = 'block';
                 
-                // راه‌اندازی نقشه
-                setTimeout(() => {
-                    initMap();
-                    updateDriversOnMap();
-                }, 100);
+                // مقداردهی اولیه نقشه
+                await initMap();
                 
                 showNotification('به اسنپ افغانستان خوش آمدید!', 'success');
             });
-
+            
             // انتخاب نوع سفر
             document.querySelectorAll('.ride-type').forEach(type => {
                 type.addEventListener('click', () => {
                     document.querySelectorAll('.ride-type').forEach(t => t.classList.remove('selected'));
                     type.classList.add('selected');
                     selectedRideType = type.dataset.type;
-                    updatePrice();
                 });
             });
-
+            
             // انتخاب روش پرداخت
             document.querySelectorAll('.payment-method').forEach(method => {
                 method.addEventListener('click', () => {
@@ -5353,7 +5181,7 @@
                     selectedPaymentMethod = method.getAttribute('data-method');
                 });
             });
-
+            
             // تعویض مبدا و مقصد
             document.getElementById('swapLocations').addEventListener('click', () => {
                 const pickupInput = document.getElementById('pickup');
@@ -5369,19 +5197,12 @@
                 
                 pickupInput.value = destinationValue;
                 destinationInput.value = pickupValue;
-                calculateDistanceAndPrice();
                 showNotification('مبدا و مقصد با موفقیت تعویض شدند', 'info');
             });
-
+            
             // فرم درخواست سفر
             document.getElementById('rideForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                
-                if (!currentUser) {
-                    showNotification('لطفاً ابتدا وارد حساب کاربری خود شوید', 'error');
-                    openAuthModal();
-                    return;
-                }
                 
                 const pickupInput = document.getElementById('pickup');
                 const destinationInput = document.getElementById('destination');
@@ -5398,154 +5219,83 @@
                     return;
                 }
 
-                if (currentDistance === 0) {
-                    showNotification('لطفاً منتظر بمانید تا مسافت محاسبه شود', 'error');
-                    return;
-                }
+                // محاسبه قیمت (ساده‌سازی شده)
+                const baseFares = {
+                    'economy': 50,
+                    'comfort': 80,
+                    'bike': 30
+                };
+                
+                currentPrice = baseFares[selectedRideType] + 100; // اضافه کردن هزینه ثابت
 
-                try {
-                    showNotification('در حال ایجاد سفر...', 'info');
-                    
-                    const tripData = {
-                        user_id: currentUser.id,
-                        pickup,
-                        destination,
-                        ride_type: selectedRideType,
-                        distance: currentDistance,
-                        price: currentPrice,
-                        payment_method: selectedPaymentMethod,
-                        status: 'requested'
-                    };
-                    
-                    const trip = await createTrip(tripData);
-                    currentTripId = trip.id;
-                    
-                    // یافتن نزدیکترین راننده
-                    showNotification('در حال یافتن نزدیکترین راننده...', 'info');
-                    const pickupCoords = await getCoordinates(pickup);
-                    const nearestDriver = await findNearestDriver(pickupCoords, selectedRideType);
-                    
-                    if (!nearestDriver) {
-                        showNotification('هیچ راننده‌ای در حال حاضر در دسترس نیست. لطفاً بعداً تلاش کنید.', 'error');
-                        return;
-                    }
-                    
-                    currentDriver = nearestDriver;
-                    
-                    // بروزرسانی سفر با اطلاعات راننده
-                    await supabase
-                        .from('trips')
-                        .update({
-                            driver_id: nearestDriver.id,
-                            driver_name: nearestDriver.name,
-                            status: 'confirmed',
-                            eta: nearestDriver.eta,
-                            distance: nearestDriver.distance
-                        })
-                        .eq('id', currentTripId);
-                    
-                    // نمایش اطلاعات راننده
-                    document.getElementById('driverAvatar').textContent = nearestDriver.name.charAt(0);
-                    document.getElementById('driverName').textContent = nearestDriver.name;
-                    document.getElementById('carModel').textContent = nearestDriver.car_model || '---';
-                    document.getElementById('carColor').textContent = nearestDriver.car_color || '---';
-                    document.getElementById('plateNumber').textContent = nearestDriver.plate_number || '---';
-                    document.getElementById('eta').textContent = `${nearestDriver.eta} دقیقه`;
-                    document.getElementById('distance').textContent = `${nearestDriver.distance?.toFixed(2) || '0'} کیلومتر`;
-                    document.getElementById('price').textContent = `${currentPrice} افغانی`;
-                    
-                    document.getElementById('driverModal').style.display = 'flex';
-                    showNotification(`راننده ${nearestDriver.name} پیدا شد!`, 'success');
-                    
-                } catch (error) {
-                    console.error('Error creating trip:', error);
-                    showNotification('خطا در ایجاد سفر. لطفاً دوباره تلاش کنید.', 'error');
+                // ایجاد سفر
+                const trip = await createTrip(pickup, destination, selectedRideType, currentPrice);
+                
+                if (trip) {
+                    // شروع جستجوی راننده
+                    startDriverSearch();
                 }
             });
-
+            
+            // لغو جستجو
+            document.getElementById('cancelSearch').addEventListener('click', () => {
+                document.getElementById('searchingOverlay').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                showNotification('جستجو لغو شد', 'warning');
+            });
+            
             // تأیید سفر
             document.getElementById('confirmRide').addEventListener('click', async () => {
                 document.getElementById('driverModal').style.display = 'none';
                 
                 try {
-                    // شروع سفر
-                    await supabase
+                    // به روزرسانی سفر با راننده
+                    const { error } = await supabase
                         .from('trips')
-                        .update({ status: 'in_progress' })
+                        .update({
+                            driver_id: currentDriver.id,
+                            status: 'confirmed',
+                            confirmed_at: new Date().toISOString()
+                        })
                         .eq('id', currentTripId);
                     
-                    // شروع ردیابی
-                    const tripData = {
-                        driver_name: currentDriver.name,
-                        eta: currentDriver.eta,
-                        distance: currentDriver.distance
-                    };
-                    startTripTracking(tripData);
+                    if (error) throw error;
+                    
+                    // به روزرسانی وضعیت راننده
+                    const { error: driverError } = await supabase
+                        .from('drivers')
+                        .update({ status: 'busy' })
+                        .eq('id', currentDriver.id);
+                    
+                    if (driverError) throw driverError;
                     
                     showNotification('سفر شما با موفقیت ثبت شد. راننده به زودی با شما تماس خواهد گرفت.', 'success');
                     
                     // بازنشانی فرم
                     document.getElementById('rideForm').reset();
-                    document.getElementById('tripCalculator').classList.remove('active');
-                    currentDistance = 0;
-                    currentPrice = 0;
+                    document.getElementById('submitBtn').disabled = false;
                     
-                    const rideTypes = document.querySelectorAll('.ride-type');
-                    rideTypes.forEach(t => t.classList.remove('selected'));
-                    if (rideTypes.length > 0) rideTypes[0].classList.add('selected');
-                    selectedRideType = 'economy';
+                    // شروع ردیابی
+                    startTripTracking();
                     
                 } catch (error) {
                     console.error('Error confirming ride:', error);
                     showNotification('خطا در تأیید سفر', 'error');
                 }
             });
-
-            // لغو ردیابی
-            document.getElementById('cancelTracking').addEventListener('click', async () => {
-                if (confirm('آیا از لغو این سفر مطمئن هستید؟')) {
-                    document.getElementById('liveTracking').style.display = 'none';
-                    
-                    if (trackingInterval) {
-                        clearInterval(trackingInterval);
-                    }
-                    
-                    try {
-                        await supabase
-                            .from('trips')
-                            .update({ status: 'cancelled' })
-                            .eq('id', currentTripId);
-                        
-                        showNotification('سفر لغو شد', 'warning');
-                    } catch (error) {
-                        console.error('Error cancelling trip:', error);
-                    }
-                }
-            });
-
-            // محاسبه مسافت هنگام تغییر مقصد
-            document.getElementById('destination').addEventListener('input', () => {
-                setTimeout(calculateDistanceAndPrice, 1000);
-            });
-
-            document.getElementById('pickup').addEventListener('input', () => {
-                setTimeout(calculateDistanceAndPrice, 1000);
-            });
-
-            // پیشنهادات مقصد
-            document.querySelectorAll('.suggestion-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    const destination = item.getAttribute('data-destination');
-                    document.getElementById('destination').value = destination;
-                    calculateDistanceAndPrice();
-                    showNotification(`مقصد به "${destination}" تنظیم شد`, 'info');
-                });
-            });
-
+            
             // مدیریت ورود/ثبتنام
-            document.getElementById('loginBtn').addEventListener('click', openAuthModal);
-            document.getElementById('mobileLoginBtn').addEventListener('click', openAuthModal);
-
+            document.getElementById('loginBtn').addEventListener('click', () => {
+                document.getElementById('authModal').style.display = 'flex';
+                clearErrors();
+            });
+            
+            document.getElementById('mobileLoginBtn').addEventListener('click', () => {
+                document.getElementById('authModal').style.display = 'flex';
+                clearErrors();
+            });
+            
+            // فرم ورود
             document.getElementById('loginForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 clearErrors();
@@ -5553,18 +5303,27 @@
                 const email = document.getElementById('loginEmail').value.trim();
                 const password = document.getElementById('loginPassword').value;
                 
-                if (!email || !password) {
-                    showError('loginEmail', 'لطفاً ایمیل و رمز عبور را وارد کنید');
-                    return;
-                }
-                
-                const success = await loginUser(email, password);
-                if (success) {
+                try {
+                    const { data, error } = await supabase.auth.signInWithPassword({
+                        email,
+                        password
+                    });
+                    
+                    if (error) throw error;
+                    
+                    // بارگذاری پروفایل کاربر
+                    await loadUserProfile(data.user.id);
+                    
                     document.getElementById('authModal').style.display = 'none';
                     document.getElementById('loginForm').reset();
+                    
+                } catch (error) {
+                    showError('loginEmail', 'ایمیل/شماره تماس یا رمز عبور اشتباه است');
+                    console.error('Login error:', error);
                 }
             });
-
+            
+            // فرم ثبت‌نام
             document.getElementById('registerForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 clearErrors();
@@ -5607,16 +5366,38 @@
                     return;
                 }
                 
-                const userData = {
-                    name,
-                    email,
-                    phone,
-                    password, // در پروژه واقعی باید hash شود
-                    role: userType
-                };
-                
-                const success = await registerUser(userData);
-                if (success) {
+                try {
+                    // ثبت‌نام کاربر در سیستم احراز هویت
+                    const { data: authData, error: authError } = await supabase.auth.signUp({
+                        email,
+                        password,
+                        options: {
+                            data: {
+                                name,
+                                phone,
+                                role: userType
+                            }
+                        }
+                    });
+                    
+                    if (authError) throw authError;
+                    
+                    // ایجاد پروفایل کاربر در جدول users
+                    const { error: userError } = await supabase
+                        .from('users')
+                        .insert([{
+                            id: authData.user.id,
+                            name,
+                            email,
+                            phone,
+                            role: userType,
+                            status: 'pending',
+                            created_at: new Date().toISOString()
+                        }]);
+                    
+                    if (userError) throw userError;
+                    
+                    showNotification('ثبتنام شما با موفقیت انجام شد. پس از تایید مدیر میتوانید وارد شوید.', 'success');
                     document.getElementById('registerForm').reset();
                     
                     // تغییر به تب ورود
@@ -5624,32 +5405,36 @@
                     document.querySelectorAll('.form-tab-content').forEach(c => c.classList.remove('active'));
                     document.querySelector('.form-tab[data-tab="login"]').classList.add('active');
                     document.getElementById('login-tab').classList.add('active');
+                    
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    showError('registerEmail', 'خطا در ثبت‌نام. لطفاً مجدداً تلاش کنید.');
                 }
             });
-
+            
             // مدیریت خروج
             document.getElementById('logoutBtn').addEventListener('click', logout);
             document.getElementById('mobileLogoutBtn').addEventListener('click', logout);
-
+            
             // مدیریت منوی موبایل
             document.getElementById('hamburger').addEventListener('click', () => {
                 document.getElementById('mobileMenu').classList.add('active');
                 document.getElementById('overlay').classList.add('active');
                 document.getElementById('hamburger').classList.add('active');
             });
-
+            
             document.getElementById('closeMenu').addEventListener('click', () => {
                 document.getElementById('mobileMenu').classList.remove('active');
                 document.getElementById('overlay').classList.remove('active');
                 document.getElementById('hamburger').classList.remove('active');
             });
-
+            
             document.getElementById('overlay').addEventListener('click', () => {
                 document.getElementById('mobileMenu').classList.remove('active');
                 document.getElementById('overlay').classList.remove('active');
                 document.getElementById('hamburger').classList.remove('active');
             });
-
+            
             // مدیریت صفحات
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', (e) => {
@@ -5685,585 +5470,193 @@
                     }
                 });
             });
-
-            // مدیریت تب‌های ادمین
+            
+            // تب‌های مدیریت
             document.querySelectorAll('.admin-tab').forEach(tab => {
                 tab.addEventListener('click', () => {
                     const tabId = tab.getAttribute('data-tab');
                     
-                    document.querySelectorAll('.admin-tab').forEach(t => {
-                        t.classList.remove('active');
-                    });
+                    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
+                    
                     tab.classList.add('active');
-                    
-                    document.querySelectorAll('.admin-tab-content').forEach(content => {
-                        content.classList.remove('active');
-                    });
-                    
-                    const targetContent = document.getElementById(`${tabId}-tab`);
-                    if (targetContent) targetContent.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
                 });
             });
-
+            
             // دکمه‌های خروجی Excel
-            document.getElementById('exportUsersBtn')?.addEventListener('click', () => exportToExcel('pendingUsersTable', 'کاربران_در_انتظار'));
-            document.getElementById('exportAllUsersBtn')?.addEventListener('click', () => exportToExcel('allUsersTable', 'همه_کاربران'));
-            document.getElementById('exportDriversBtn')?.addEventListener('click', () => exportToExcel('driversTable', 'رانندگان'));
-            document.getElementById('exportTripsBtn')?.addEventListener('click', () => exportToExcel('adminTripsTable', 'سفرها'));
-            document.getElementById('exportDiscountsBtn')?.addEventListener('click', () => exportToExcel('discountsTable', 'تخفیف‌ها'));
-            document.getElementById('exportSupportBtn')?.addEventListener('click', () => exportToExcel('adminSupportTable', 'پشتیبانی'));
-
+            document.getElementById('exportUsersBtn').addEventListener('click', () => exportToExcel('allUsersTable', 'کاربران'));
+            document.getElementById('exportDriversBtn').addEventListener('click', () => exportToExcel('driversTable', 'رانندگان'));
+            document.getElementById('exportTripsBtn').addEventListener('click', () => exportToExcel('adminTripsTable', 'سفرها'));
+            document.getElementById('exportDiscountsBtn').addEventListener('click', () => exportToExcel('discountsTable', 'تخفیف‌ها'));
+            document.getElementById('exportSupportBtn').addEventListener('click', () => exportToExcel('adminSupportTable', 'پشتیبانی'));
+            
+            // دکمه‌های فیلتر
+            document.getElementById('filterUsersBtn').addEventListener('click', () => {
+                const filters = document.getElementById('usersFilters');
+                filters.style.display = filters.style.display === 'none' ? 'flex' : 'none';
+            });
+            
+            document.getElementById('filterTripsBtn').addEventListener('click', () => {
+                const filters = document.getElementById('tripsFilters');
+                filters.style.display = filters.style.display === 'none' ? 'flex' : 'none';
+            });
+            
+            document.getElementById('filterSupportBtn').addEventListener('click', () => {
+                const filters = document.getElementById('supportFilters');
+                filters.style.display = filters.style.display === 'none' ? 'flex' : 'none';
+            });
+            
             // دکمه‌های بروزرسانی
-            document.getElementById('refreshUsersBtn')?.addEventListener('click', () => {
-                loadPendingUsers();
-                loadAllUsers();
-                showNotification('کاربران بروزرسانی شدند', 'info');
+            document.getElementById('refreshUsersBtn').addEventListener('click', async () => {
+                await loadPendingUsers();
+                await loadAllUsers();
+                showNotification('لیست کاربران بروزرسانی شد', 'success');
             });
-
-            document.getElementById('refreshDriversBtn')?.addEventListener('click', () => {
-                loadDrivers();
-                showNotification('رانندگان بروزرسانی شدند', 'info');
+            
+            document.getElementById('refreshDriversBtn').addEventListener('click', async () => {
+                await loadDrivers();
+                showNotification('لیست رانندگان بروزرسانی شد', 'success');
             });
-
-            document.getElementById('refreshTripsBtn')?.addEventListener('click', () => {
-                loadAdminTrips();
-                showNotification('سفرها بروزرسانی شدند', 'info');
+            
+            // افزودن راننده جدید
+            document.getElementById('addDriverBtn').addEventListener('click', () => {
+                document.getElementById('addDriverModal').style.display = 'flex';
             });
-
-            document.getElementById('refreshDiscountsBtn')?.addEventListener('click', () => {
-                loadAdminDiscounts();
-                showNotification('تخفیف‌ها بروزرسانی شدند', 'info');
-            });
-
-            document.getElementById('refreshSupportBtn')?.addEventListener('click', () => {
-                loadAdminSupport();
-                showNotification('تیکت‌های پشتیبانی بروزرسانی شدند', 'info');
-            });
-
-            // دکمه فیلتر سفرها
-            document.getElementById('filterTripsBtn')?.addEventListener('click', async () => {
-                const date = document.getElementById('tripFilterDate').value;
-                const status = document.getElementById('tripFilterStatus').value;
+            
+            document.getElementById('addDriverForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('driverFullName').value;
+                const email = document.getElementById('driverEmail').value;
+                const phone = document.getElementById('driverPhone').value;
+                const vehicleType = document.getElementById('vehicleType').value;
+                const carModel = document.getElementById('carModelInput').value;
+                const carColor = document.getElementById('carColorInput').value;
+                const plateNumber = document.getElementById('plateNumberInput').value;
+                const driverLicense = document.getElementById('driverLicense').value;
                 
                 try {
-                    let query = supabase
-                        .from('trips')
-                        .select(`
-                            *,
-                            passenger:users!trips_user_id_fkey(name),
-                            driver:drivers!trips_driver_id_fkey(name)
-                        `)
-                        .order('created_at', { ascending: false });
+                    // ابتدا کاربر را ایجاد می‌کنیم
+                    const { data: authData, error: authError } = await supabase.auth.signUp({
+                        email,
+                        password: 'Driver123', // رمز عبور پیش‌فرض
+                        options: {
+                            data: {
+                                name,
+                                phone,
+                                role: 'driver'
+                            }
+                        }
+                    });
                     
-                    if (date) {
-                        const startDate = new Date(date);
-                        const endDate = new Date(date);
-                        endDate.setDate(endDate.getDate() + 1);
-                        
-                        query = query
-                            .gte('created_at', startDate.toISOString())
-                            .lt('created_at', endDate.toISOString());
-                    }
+                    if (authError) throw authError;
                     
-                    if (status) {
-                        query = query.eq('status', status);
-                    }
+                    // ایجاد رکورد کاربر
+                    const { error: userError } = await supabase
+                        .from('users')
+                        .insert([{
+                            id: authData.user.id,
+                            name,
+                            email,
+                            phone,
+                            role: 'driver',
+                            status: 'approved',
+                            created_at: new Date().toISOString()
+                        }]);
                     
-                    const { data: trips, error } = await query;
+                    if (userError) throw userError;
+                    
+                    // ایجاد راننده
+                    const { error: driverError } = await supabase
+                        .from('drivers')
+                        .insert([{
+                            user_id: authData.user.id,
+                            name,
+                            vehicle_type: vehicleType,
+                            vehicle_model: carModel,
+                            vehicle_color: carColor,
+                            license_plate: plateNumber,
+                            driver_license: driverLicense,
+                            status: 'available',
+                            is_online: true,
+                            rating: 5,
+                            total_trips: 0,
+                            created_at: new Date().toISOString()
+                        }]);
+                    
+                    if (driverError) throw driverError;
+                    
+                    showNotification('راننده جدید با موفقیت افزوده شد', 'success');
+                    document.getElementById('addDriverModal').style.display = 'none';
+                    document.getElementById('addDriverForm').reset();
+                    
+                    await loadDrivers();
+                    await loadActiveDrivers();
+                    
+                } catch (error) {
+                    console.error('Error adding driver:', error);
+                    showNotification('خطا در افزودن راننده', 'error');
+                }
+            });
+            
+            // افزودن تخفیف جدید
+            document.getElementById('addDiscountBtn').addEventListener('click', () => {
+                document.getElementById('addDiscountModal').style.display = 'flex';
+            });
+            
+            document.getElementById('addDiscountForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const code = document.getElementById('discountCode').value;
+                const percent = document.getElementById('discountPercent').value;
+                const expiry = document.getElementById('discountExpiry').value;
+                const maxUses = document.getElementById('maxUses').value;
+                const minAmount = document.getElementById('minAmount').value;
+                const type = document.getElementById('discountType').value;
+                
+                try {
+                    const { error } = await supabase
+                        .from('discounts')
+                        .insert([{
+                            code,
+                            discount_percent: type === 'percentage' ? percent : null,
+                            discount_amount: type === 'fixed' ? percent : null,
+                            expiry_date: expiry,
+                            max_uses: maxUses,
+                            min_order_amount: minAmount,
+                            used_count: 0,
+                            is_active: true,
+                            created_at: new Date().toISOString()
+                        }]);
                     
                     if (error) throw error;
                     
-                    const adminTripsTable = document.getElementById('adminTripsTable');
-                    if (!adminTripsTable) return;
+                    showNotification('تخفیف جدید با موفقیت افزوده شد', 'success');
+                    document.getElementById('addDiscountModal').style.display = 'none';
+                    document.getElementById('addDiscountForm').reset();
                     
-                    adminTripsTable.innerHTML = '';
-                    
-                    if (trips.length === 0) {
-                        adminTripsTable.innerHTML = `
-                            <tr>
-                                <td colspan="9" style="text-align: center; padding: 20px; color: var(--gray);">
-                                    هیچ سفر مطابق فیلترها یافت نشد
-                                </td>
-                            </tr>
-                        `;
-                        return;
-                    }
-                    
-                    trips.forEach(trip => {
-                        const row = document.createElement('tr');
-                        const date = new Date(trip.created_at).toLocaleDateString('fa-IR');
-                        const statusClass = `status-${trip.status}`;
-                        const statusText = {
-                            'requested': 'درخواست شده',
-                            'confirmed': 'تأیید شده',
-                            'in_progress': 'در حال انجام',
-                            'completed': 'تکمیل شده',
-                            'cancelled': 'لغو شده'
-                        }[trip.status] || trip.status;
-                        
-                        row.innerHTML = `
-                            <td>${date}</td>
-                            <td>${trip.passenger?.name || '---'}</td>
-                            <td>${trip.driver?.name || '---'}</td>
-                            <td>${trip.pickup}</td>
-                            <td>${trip.destination}</td>
-                            <td>${trip.distance ? trip.distance.toFixed(2) + ' کیلومتر' : '---'}</td>
-                            <td>${trip.price ? trip.price + ' افغانی' : '---'}</td>
-                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                            <td class="action-buttons">
-                                ${trip.status === 'requested' || trip.status === 'confirmed' ? 
-                                  `<button class="action-btn btn-reject" onclick="cancelTrip('${trip.id}')">لغو سفر</button>` : ''}
-                                <button class="action-btn btn-reject" onclick="deleteTrip('${trip.id}')">حذف</button>
-                            </td>
-                        `;
-                        
-                        adminTripsTable.appendChild(row);
-                    });
-                    
-                    showNotification('سفرها با موفقیت فیلتر شدند', 'success');
+                    await loadAdminDiscounts();
                     
                 } catch (error) {
-                    console.error('Error filtering trips:', error);
-                    showNotification('خطا در فیلتر کردن سفرها', 'error');
+                    console.error('Error adding discount:', error);
+                    showNotification('خطا در افزودن تخفیف', 'error');
                 }
             });
-
-            // کنترل‌های نقشه
-            document.getElementById('locateMe')?.addEventListener('click', () => {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            const coords = [position.coords.latitude, position.coords.longitude];
-                            
-                            if (userMarker) {
-                                map.removeLayer(userMarker);
-                            }
-                            
-                            userMarker = L.marker(coords, {
-                                icon: L.divIcon({
-                                    className: 'passenger-marker',
-                                    html: '<i class="fas fa-user"></i>',
-                                    iconSize: [30, 30]
-                                })
-                            }).addTo(map);
-                            userMarker.bindPopup('موقعیت فعلی شما').openPopup();
-                            
-                            map.setView(coords, 15);
-                            showNotification('موقعیت شما روی نقشه نشان داده شد', 'info');
-                        },
-                        (error) => {
-                            console.error('Geolocation error:', error);
-                            showNotification('دسترسی به موقعیت مکانی امکان‌پذیر نیست', 'error');
-                        }
-                    );
-                } else {
-                    showNotification('مرورگر شما از موقعیت‌یابی پشتیبانی نمی‌کند', 'error');
-                }
-            });
-
-            document.getElementById('zoomIn')?.addEventListener('click', () => {
-                map.zoomIn();
-            });
-
-            document.getElementById('zoomOut')?.addEventListener('click', () => {
-                map.zoomOut();
-            });
-
-            // مدیریت مدال‌ها
-            document.querySelectorAll('.close-modal').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    btn.closest('.modal').style.display = 'none';
-                });
-            });
-
-            // بستن مدال‌ها با کلیک خارج
-            window.addEventListener('click', (e) => {
-                if (e.target.classList.contains('modal')) {
-                    e.target.style.display = 'none';
-                }
-            });
-
-            // چک کردن وضعیت ورود کاربر
-            checkUserLoginStatus();
-        });
-
-        // چک کردن وضعیت ورود
-        async function checkUserLoginStatus() {
-            const savedUser = localStorage.getItem('snapp_current_user');
-            if (savedUser) {
-                try {
-                    const userData = JSON.parse(savedUser);
-                    
-                    // بررسی وجود کاربر در دیتابیس
-                    const { data, error } = await supabase
-                        .from('users')
-                        .select('*')
-                        .eq('id', userData.id)
-                        .single();
-                    
-                    if (!error && data) {
-                        currentUser = data;
-                        isAdmin = currentUser.role === 'admin';
-                        updateUIAfterLogin();
-                    }
-                } catch (error) {
-                    localStorage.removeItem('snapp_current_user');
-                }
-            }
-        }
-
-        // بارگذاری سفرهای من
-        async function loadMyTrips() {
-            if (!currentUser) return;
-            
-            try {
-                const { data: trips, error } = await supabase
-                    .from('trips')
-                    .select(`
-                        *,
-                        driver:drivers!trips_driver_id_fkey(name, car_model, rating)
-                    `)
-                    .eq('user_id', currentUser.id)
-                    .order('created_at', { ascending: false });
-                
-                if (error) throw error;
-                
-                const myTripsTable = document.getElementById('myTripsTable');
-                if (!myTripsTable) return;
-                
-                myTripsTable.innerHTML = '';
-                
-                if (trips.length === 0) {
-                    myTripsTable.innerHTML = `
-                        <tr>
-                            <td colspan="8" style="text-align: center; padding: 40px;">
-                                <i class="fas fa-road" style="font-size: 48px; color: var(--gray); margin-bottom: 15px; display: block;"></i>
-                                <p style="color: var(--gray);">هیچ سفری یافت نشد</p>
-                            </td>
-                        </tr>
-                    `;
-                    return;
-                }
-                
-                trips.forEach(trip => {
-                    const row = document.createElement('tr');
-                    const date = new Date(trip.created_at).toLocaleDateString('fa-IR');
-                    const statusClass = `status-${trip.status}`;
-                    const statusText = {
-                        'requested': 'درخواست شده',
-                        'confirmed': 'تأیید شده',
-                        'in_progress': 'در حال انجام',
-                        'completed': 'تکمیل شده',
-                        'cancelled': 'لغو شده'
-                    }[trip.status] || trip.status;
-                    
-                    row.innerHTML = `
-                        <td>${date}</td>
-                        <td>${trip.pickup}</td>
-                        <td>${trip.destination}</td>
-                        <td>${trip.ride_type === 'economy' ? 'اقتصادی' : trip.ride_type === 'comfort' ? 'کلاسیک' : 'موتور'}</td>
-                        <td>${trip.distance?.toFixed(2) || '0'} کیلومتر</td>
-                        <td>${trip.price || '0'} افغانی</td>
-                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                        <td class="action-buttons">
-                            ${trip.status === 'requested' || trip.status === 'confirmed' || trip.status === 'in_progress' ? 
-                              `<button class="action-btn btn-reject" onclick="cancelUserTrip('${trip.id}')">لغو سفر</button>` : ''}
-                            ${trip.status === 'completed' && !trip.rated ? 
-                              `<button class="action-btn btn-approve" onclick="openRatingModal('${trip.id}', '${trip.driver?.name || ''}')">امتیازدهی</button>` : ''}
-                        </td>
-                    `;
-                    
-                    myTripsTable.appendChild(row);
-                });
-                
-            } catch (error) {
-                console.error('Error loading user trips:', error);
-                showNotification('خطا در بارگذاری سفرها', 'error');
-            }
-        }
-
-        async function cancelUserTrip(tripId) {
-            if (!confirm('آیا از لغو این سفر مطمئن هستید؟')) return;
-            
-            try {
-                const { error } = await supabase
-                    .from('trips')
-                    .update({ status: 'cancelled' })
-                    .eq('id', tripId);
-                
-                if (error) throw error;
-                
-                showNotification('سفر لغو شد', 'success');
-                loadMyTrips();
-                
-            } catch (error) {
-                console.error('Error cancelling user trip:', error);
-                showNotification('خطا در لغو سفر', 'error');
-            }
-        }
-
-        // بارگذاری تخفیف‌ها
-        async function loadDiscounts() {
-            try {
-                const { data: discounts, error } = await supabase
-                    .from('discounts')
-                    .select('*')
-                    .gte('expiry_date', new Date().toISOString())
-                    .order('created_at', { ascending: false });
-                
-                if (error) throw error;
-                
-                const discountsList = document.getElementById('discountsList');
-                if (!discountsList) return;
-                
-                discountsList.innerHTML = '';
-                
-                if (discounts.length === 0) {
-                    discountsList.innerHTML = `
-                        <div style="text-align: center; padding: 40px;">
-                            <i class="fas fa-tag" style="font-size: 48px; color: var(--gray); margin-bottom: 15px; display: block;"></i>
-                            <p style="color: var(--gray);">هیچ تخفیف فعالی موجود نیست</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                discounts.forEach(discount => {
-                    const discountElement = document.createElement('div');
-                    discountElement.className = 'discount-card';
-                    
-                    const expiryDate = new Date(discount.expiry_date).toLocaleDateString('fa-IR');
-                    const progress = (discount.used_count / discount.max_uses) * 100;
-                    
-                    discountElement.innerHTML = `
-                        <div class="discount-header">
-                            <div class="discount-code">${discount.code}</div>
-                            <div class="discount-percent">${discount.percent}% تخفیف</div>
-                        </div>
-                        <div class="discount-details">
-                            <div>منقضی: ${expiryDate}</div>
-                            <div>استفاده شده: ${discount.used_count} از ${discount.max_uses}</div>
-                        </div>
-                        <div class="discount-progress">
-                            <div class="progress-text">
-                                <span>۰</span>
-                                <span>${discount.max_uses}</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${progress}%"></div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    discountsList.appendChild(discountElement);
-                });
-                
-            } catch (error) {
-                console.error('Error loading discounts:', error);
-                showNotification('خطا در بارگذاری تخفیف‌ها', 'error');
-            }
-        }
-
-        // به‌روزرسانی پروفایل
-        async function updateProfilePage() {
-            if (!currentUser) return;
-            
-            const profileAvatar = document.getElementById('profileAvatar');
-            const profileName = document.getElementById('profileName');
-            const profileEmail = document.getElementById('profileEmail');
-            const profilePhone = document.getElementById('profilePhone');
-            const profileRole = document.getElementById('profileRole');
-            const editName = document.getElementById('editName');
-            const editEmail = document.getElementById('editEmail');
-            const editPhone = document.getElementById('editPhone');
-            
-            if (profileAvatar) profileAvatar.textContent = currentUser.name.charAt(0);
-            if (profileName) profileName.textContent = currentUser.name;
-            if (profileEmail) profileEmail.textContent = currentUser.email;
-            if (profilePhone) profilePhone.textContent = currentUser.phone;
-            if (profileRole) profileRole.textContent = currentUser.role === 'passenger' ? 'مسافر' : 'راننده';
-            
-            if (editName) editName.value = currentUser.name;
-            if (editEmail) editEmail.value = currentUser.email;
-            if (editPhone) editPhone.value = currentUser.phone;
-            
-            // محاسبه آمار
-            try {
-                const { data: trips, error: tripsError } = await supabase
-                    .from('trips')
-                    .select('price')
-                    .eq('user_id', currentUser.id)
-                    .eq('status', 'completed');
-                
-                if (!tripsError) {
-                    const totalTrips = trips.length;
-                    const totalSpent = trips.reduce((sum, trip) => sum + (trip.price || 0), 0);
-                    
-                    const totalTripsCount = document.getElementById('totalTripsCount');
-                    const totalSpentElement = document.getElementById('totalSpent');
-                    
-                    if (totalTripsCount) totalTripsCount.textContent = totalTrips;
-                    if (totalSpentElement) totalSpentElement.textContent = totalSpent;
-                }
-                
-                const userRatingElement = document.getElementById('userRating');
-                if (userRatingElement) userRatingElement.textContent = currentUser.rating || 'جدید';
-                
-            } catch (error) {
-                console.error('Error loading profile stats:', error);
-            }
-        }
-
-        // ذخیره پروفایل
-        document.getElementById('saveProfile')?.addEventListener('click', async () => {
-            const name = document.getElementById('editName').value;
-            const email = document.getElementById('editEmail').value;
-            const phone = document.getElementById('editPhone').value;
-            
-            if (!name || !email || !phone) {
-                showNotification('لطفاً تمام فیلدها را پر کنید', 'error');
-                return;
-            }
-            
-            try {
-                const { error } = await supabase
-                    .from('users')
-                    .update({ name, email, phone })
-                    .eq('id', currentUser.id);
-                
-                if (error) throw error;
-                
-                // بروزرسانی کاربر فعلی
-                currentUser.name = name;
-                currentUser.email = email;
-                currentUser.phone = phone;
-                localStorage.setItem('snapp_current_user', JSON.stringify(currentUser));
-                
-                updateUIAfterLogin();
-                showNotification('پروفایل با موفقیت به‌روزرسانی شد', 'success');
-                
-            } catch (error) {
-                console.error('Error updating profile:', error);
-                showNotification('خطا در به‌روزرسانی پروفایل', 'error');
-            }
-        });
-
-        // مدال امتیازدهی
-        function openRatingModal(tripId, driverName) {
-            const ratingModal = document.getElementById('ratingModal');
-            const ratingStars = document.getElementById('ratingStars');
-            
-            if (!ratingModal || !ratingStars) return;
-            
-            ratingModal.setAttribute('data-trip-id', tripId);
-            
-            if (driverName) {
-                document.getElementById('ratingDriverName').textContent = driverName;
-                document.getElementById('ratingDriverAvatar').textContent = driverName.charAt(0);
-            }
-            
-            const stars = ratingStars.querySelectorAll('.rating-star');
-            stars.forEach(star => {
-                star.classList.remove('active');
-                star.addEventListener('click', function() {
-                    const rating = parseInt(this.getAttribute('data-rating'));
-                    stars.forEach(s => {
-                        if (parseInt(s.getAttribute('data-rating')) <= rating) {
-                            s.classList.add('active');
-                        } else {
-                            s.classList.remove('active');
-                        }
-                    });
-                    ratingModal.setAttribute('data-rating', rating);
-                });
-            });
-            
-            ratingModal.style.display = 'flex';
-        }
-
-        document.getElementById('submitRating')?.addEventListener('click', async () => {
-            const tripId = document.getElementById('ratingModal').getAttribute('data-trip-id');
-            const rating = document.getElementById('ratingModal').getAttribute('data-rating');
-            const comment = document.getElementById('ratingComment').value;
-            
-            if (!rating) {
-                showNotification('لطفاً امتیاز دهید', 'error');
-                return;
-            }
-            
-            try {
-                // به‌روزرسانی سفر
-                const { error: tripError } = await supabase
-                    .from('trips')
-                    .update({ 
-                        rated: true,
-                        rating: parseInt(rating),
-                        rating_comment: comment
-                    })
-                    .eq('id', tripId);
-                
-                if (tripError) throw tripError;
-                
-                // محاسبه امتیاز جدید راننده
-                const { data: trip, error: getTripError } = await supabase
-                    .from('trips')
-                    .select('driver_id, rating')
-                    .eq('id', tripId)
-                    .single();
-                
-                if (!getTripError && trip.driver_id) {
-                    // دریافت امتیازهای قبلی راننده
-                    const { data: driverTrips, error: driverTripsError } = await supabase
-                        .from('trips')
-                        .select('rating')
-                        .eq('driver_id', trip.driver_id)
-                        .not('rating', 'is', null);
-                    
-                    if (!driverTripsError) {
-                        const ratings = driverTrips.map(t => t.rating);
-                        const averageRating = ratings.reduce((a, b) => a + b, 0) / ratings.length;
-                        
-                        // به‌روزرسانی امتیاز راننده
-                        await supabase
-                            .from('drivers')
-                            .update({ rating: averageRating.toFixed(1) })
-                            .eq('id', trip.driver_id);
-                    }
-                }
-                
-                showNotification('امتیاز شما ثبت شد. متشکریم!', 'success');
-                document.getElementById('ratingModal').style.display = 'none';
-                loadMyTrips();
-                
-            } catch (error) {
-                console.error('Error submitting rating:', error);
-                showNotification('خطا در ثبت امتیاز', 'error');
-            }
-        });
-
-        // مدال ورود/ثبتنام
-        function openAuthModal() {
-            const authModal = document.getElementById('authModal');
-            if (authModal) authModal.style.display = 'flex';
-            clearErrors();
-        }
-
-        // توابع کمکی برای دسترسی از المنت‌های HTML
+        };
+        
+        // توابع عمومی برای استفاده در HTML
+        window.selectDriver = selectDriver;
         window.approveUser = approveUser;
         window.rejectUser = rejectUser;
-        window.deactivateUser = deactivateUser;
-        window.activateUser = activateUser;
+        window.suspendUser = suspendUser;
         window.deleteUser = deleteUser;
         window.toggleDriverStatus = toggleDriverStatus;
         window.deleteDriver = deleteDriver;
+        window.assignDriverToTrip = assignDriverToTrip;
         window.cancelTrip = cancelTrip;
-        window.deleteTrip = deleteTrip;
         window.deleteDiscount = deleteDiscount;
-        window.answerTicket = answerTicket;
-        window.closeTicket = closeTicket;
-        window.deleteTicket = deleteTicket;
-        window.cancelUserTrip = cancelUserTrip;
-        window.openRatingModal = openRatingModal;
+        window.exportToExcel = exportToExcel;
     </script>
 </body>
 </html>
