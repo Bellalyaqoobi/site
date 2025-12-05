@@ -460,6 +460,89 @@
         </div>
 
         <!-- صفحه پنل مدیریت -->
+        <!-- فرم ثبت‌نام -->
+<form id="registerForm" class="auth-form">
+    <div class="form-group">
+        <input type="text" id="registerName" placeholder="نام و نام خانوادگی" required>
+    </div>
+    <div class="form-group">
+        <input type="email" id="registerEmail" placeholder="ایمیل" required>
+    </div>
+    <div class="form-group">
+        <input type="tel" id="registerPhone" placeholder="شماره تماس" required>
+    </div>
+    <div class="form-group">
+        <input type="password" id="registerPassword" placeholder="رمز عبور" required>
+    </div>
+    <div class="form-group">
+        <input type="password" id="registerConfirmPassword" placeholder="تکرار رمز عبور" required>
+    </div>
+    <div class="form-group">
+        <select id="userType" required>
+            <option value="">نوع کاربر را انتخاب کنید</option>
+            <option value="passenger">مسافر</option>
+            <option value="driver">راننده</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">ثبت‌نام</button>
+</form>
+
+<!-- فرم ورود -->
+<form id="loginForm" class="auth-form">
+    <div class="form-group">
+        <input type="email" id="loginEmail" placeholder="ایمیل" required>
+    </div>
+    <div class="form-group">
+        <input type="password" id="loginPassword" placeholder="رمز عبور" required>
+    </div>
+    <div class="form-group">
+        <a href="#" onclick="showForgotPassword()">رمز عبور را فراموش کرده‌اید؟</a>
+    </div>
+    <button type="submit" class="btn btn-primary">ورود</button>
+</form>
+
+<!-- فرم فراموشی رمز عبور -->
+<form id="forgotPasswordForm" class="auth-form" style="display: none;">
+    <div class="form-group">
+        <input type="email" id="forgotEmail" placeholder="ایمیل خود را وارد کنید" required>
+    </div>
+    <button type="submit" class="btn btn-primary">ارسال لینک بازنشانی</button>
+    <button type="button" class="btn btn-secondary" onclick="showLogin()">بازگشت به ورود</button>
+</form>
+
+<!-- در صفحه پروفایل -->
+<form id="changePasswordForm">
+    <div class="form-group">
+        <input type="password" id="currentPassword" placeholder="رمز عبور فعلی" required>
+    </div>
+    <div class="form-group">
+        <input type="password" id="newPassword" placeholder="رمز عبور جدید" required>
+    </div>
+    <div class="form-group">
+        <input type="password" id="confirmNewPassword" placeholder="تکرار رمز عبور جدید" required>
+    </div>
+    <button type="submit" class="btn btn-primary">تغییر رمز عبور</button>
+</form>
+
+<form id="changeEmailForm">
+    <div class="form-group">
+        <input type="email" id="newEmail" placeholder="ایمیل جدید" required>
+    </div>
+    <div class="form-group">
+        <input type="password" id="passwordForEmail" placeholder="رمز عبور فعلی برای تأیید" required>
+    </div>
+    <button type="submit" class="btn btn-primary">تغییر ایمیل</button>
+</form>
+
+<form id="profileForm">
+    <div class="form-group">
+        <input type="text" id="editName" placeholder="نام و نام خانوادگی" required>
+    </div>
+    <div class="form-group">
+        <input type="tel" id="editPhone" placeholder="شماره تماس" required>
+    </div>
+    <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
+</form>
         <div class="page admin-panel" id="admin-page">
             <h2 class="page-title"><i class="fas fa-cog"></i> پنل مدیریت</h2>
             
