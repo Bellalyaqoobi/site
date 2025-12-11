@@ -886,6 +886,212 @@ async function saveRouteDetails(tripId, routeInfo) {
     }
 }
 
+// ==================== مدیریت منوی موبایل ====================
+
+function setupMobileMenu() {
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenu = document.getElementById('closeMenu');
+    const overlay = document.getElementById('overlay');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-links .nav-link');
+    
+    if (!hamburger || !mobileMenu || !overlay) {
+        console.error('عناصر منوی موبایل یافت نشدند');
+        return;
+    }
+    
+    // باز کردن منوی موبایل
+    hamburger.addEventListener('click', () => {
+        mobileMenu.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+    
+    // بستن منوی موبایل
+    function closeMobileMenu() {
+        mobileMenu.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
+    if (closeMenu) {
+        closeMenu.addEventListener('click', closeMobileMenu);
+    }
+    
+    overlay.addEventListener('click', closeMobileMenu);
+    
+    // بستن منو با کلیک روی لینک‌ها
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
+    });
+    
+    // بستن با کلید ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+            closeMobileMenu();
+        }
+    });
+}
+
+// ==================== مدیریت پیمایش بین صفحات ====================
+
+function setupNavigation() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-links .nav-link');
+    const pages = document.querySelectorAll('.page');
+    
+    function switchPage(pageId) {
+        // غیرفعال کردن همه صفحات
+        pages.forEach(page => {
+            page.classList.remove('active');
+        });
+        
+        // غیرفعال کردن همه لینک‌ها
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        mobileNavLinks.forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        // فعال کردن صفحه مورد نظر
+        const targetPage = document.getElementById(pageId + '-page');
+        if (targetPage) {
+            targetPage.classList.add('active');
+        }
+        
+        // فعال کردن لینک مربوطه
+        const activeLink = document.querySelector(`.nav-link[data-page="${pageId}"]`);
+        const mobileActiveLink = document.querySelector(`.mobile-nav-links .nav-link[data-page="${pageId}"]`);
+        
+        if (activeLink) activeLink.classList.add('active');
+        if (mobileActiveLink) mobileActiveLink.classList.add('active');
+        
+        // بروزرسانی عنوان صفحه
+        updatePageTitle(pageId);
+    }
+    
+    function updatePageTitle(pageId) {
+        const titles = {
+            'home': 'اسنپ افغانستان - درخواست سفر',
+            'my-trips': 'سفرهای من',
+            'discounts': 'تخفیف‌ها',
+            'support': 'پشتیبانی',
+            'profile': 'پروفایل',
+            'admin': 'پنل مدیریت'
+        };
+        
+        if (titles[pageId]) {
+            document.title = titles[pageId];
+        }
+    }
+    
+    // اضافه کردن event listener به لینک‌های دسکتاپ
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const pageId = link.getAttribute('data-page');
+            switchPage(pageId);
+        });
+    });
+    
+    // اضافه کردن event listener به لینک‌های موبایل
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const pageId = link.getAttribute('data-page');
+            switchPage(pageId);
+        });
+    });
+    
+    // نمایش صفحه خانه به صورت پیش‌فرض
+    switchPage('home');
+}
+
+// ==================== مدیریت مدال‌ها ====================
+
+function setupModals() {
+    const authModal = document.getElementById('authModal');
+    const loginBtn = document.getElementById('loginBtn');
+    const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+    const closeAuthModal = document.getElementById('closeAuthModal');
+    const cancelAuthModal = document.getElementById('cancelAuthModal');
+    
+    // باز کردن مدال ورود/ثبت‌نام
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+            authModal.style.display = 'block';
+        });
+    }
+    
+    if (mobileLoginBtn) {
+        mobileLoginBtn.addEventListener('click', () => {
+            authModal.style.display = 'block';
+        });
+    }
+    
+    // بستن مدال ورود/ثبت‌نام
+    if (closeAuthModal) {
+        closeAuthModal.addEventListener('click', () => {
+            authModal.style.display = 'none';
+        });
+    }
+    
+    if (cancelAuthModal) {
+        cancelAuthModal.addEventListener('click', () => {
+            authModal.style.display = 'none';
+        });
+    }
+    
+    // بستن مدال با کلیک خارج از آن
+    window.addEventListener('click', (e) => {
+        if (e.target === authModal) {
+            authModal.style.display = 'none';
+        }
+    });
+    
+    // مدیریت تب‌های فرم
+    const formTabs = document.querySelectorAll('.form-tab');
+    formTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabId = tab.getAttribute('data-tab');
+            
+            // غیرفعال کردن همه تب‌ها
+            formTabs.forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.form-tab-content').forEach(c => c.classList.remove('active'));
+            
+            // فعال کردن تب انتخاب شده
+            tab.classList.add('active');
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+        });
+    });
+    
+    // مدیریت نمایش/مخفی کردن رمز عبور
+    setupPasswordToggles();
+}
+
+function setupPasswordToggles() {
+    const passwordToggles = document.querySelectorAll('.password-toggle');
+    
+    passwordToggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            const input = toggle.previousElementSibling;
+            const icon = toggle.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    });
+}
+
 // ==================== توابع موجود (به‌روزرسانی شده) ====================
 
 /**
@@ -936,6 +1142,15 @@ function calculateAndShowPrice(distance) {
 
 window.onload = async function() {
     await checkUserLoginStatus();
+    
+    // راه‌اندازی منوی موبایل
+    setupMobileMenu();
+    
+    // راه‌اندازی پیمایش صفحات
+    setupNavigation();
+    
+    // راه‌اندازی مدال‌ها
+    setupModals();
     
     const startUsingBtn = document.getElementById('start-using-btn');
     if (startUsingBtn) {
@@ -1012,7 +1227,7 @@ window.onload = async function() {
     
     document.querySelectorAll('.ride-type').forEach(type => {
         type.addEventListener('click', () => {
-                    document.querySelectorAll('.ride-type').forEach(t => t.classList.remove('selected'));
+            document.querySelectorAll('.ride-type').forEach(t => t.classList.remove('selected'));
             type.classList.add('selected');
             selectedRideType = type.dataset.type;
             
@@ -1050,6 +1265,56 @@ window.onload = async function() {
                     }
                 );
             }
+        });
+    }
+    
+    // دکمه ورود/خروج
+    const loginBtn = document.getElementById('loginBtn');
+    const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+    
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+            document.getElementById('authModal').style.display = 'block';
+        });
+    }
+    
+    if (mobileLoginBtn) {
+        mobileLoginBtn.addEventListener('click', () => {
+            document.getElementById('authModal').style.display = 'block';
+        });
+    }
+    
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', logoutUser);
+    }
+    
+    if (mobileLogoutBtn) {
+        mobileLogoutBtn.addEventListener('click', logoutUser);
+    }
+    
+    // فرم ورود
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            await loginUser(email, password);
+        });
+    }
+    
+    // فرم ثبت‌نام
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const name = document.getElementById('registerName').value;
+            const phone = document.getElementById('registerPhone').value;
+            await registerUser(email, password, name, phone);
         });
     }
 };
@@ -1257,10 +1522,9 @@ async function loginUser(email, password) {
         showNotification('ورود موفقیت‌آمیز بود!', 'success');
         
         // بستن مودال ورود
-        const loginModal = document.getElementById('loginModal');
-        if (loginModal) {
-            const modal = bootstrap.Modal.getInstance(loginModal);
-            if (modal) modal.hide();
+        const authModal = document.getElementById('authModal');
+        if (authModal) {
+            authModal.style.display = 'none';
         }
         
         updateUserInterface();
@@ -1303,10 +1567,9 @@ async function registerUser(email, password, name, phone) {
         showNotification('ثبت‌نام موفقیت‌آمیز بود! لطفاً ایمیل خود را بررسی کنید', 'success');
         
         // بستن مودال ثبت‌نام
-        const registerModal = document.getElementById('registerModal');
-        if (registerModal) {
-            const modal = bootstrap.Modal.getInstance(registerModal);
-            if (modal) modal.hide();
+        const authModal = document.getElementById('authModal');
+        if (authModal) {
+            authModal.style.display = 'none';
         }
         
         return true;
@@ -1337,38 +1600,48 @@ async function logoutUser() {
 }
 
 function updateUserInterface() {
-    const authButtons = document.querySelector('.auth-buttons');
-    const userMenu = document.getElementById('user-menu');
+    const loginBtn = document.getElementById('loginBtn');
+    const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+    const adminLink = document.getElementById('adminLink');
+    const mobileAdminLink = document.getElementById('mobileAdminLink');
     const welcomeText = document.getElementById('welcome-text');
     
     if (currentUser) {
-        // نمایش منوی کاربر
-        if (authButtons) authButtons.style.display = 'none';
-        if (userMenu) {
-            userMenu.style.display = 'flex';
-            
-            // به‌روزرسانی نام کاربر
-            const userEmail = currentUser.email || 'کاربر';
-            if (welcomeText) {
-                welcomeText.textContent = userEmail;
-            }
-            
-            // تنظیم نام در دکمه کاربر
-            const userNameBtn = document.querySelector('.user-name-btn');
-            if (userNameBtn) {
-                userNameBtn.textContent = currentUser.user_metadata?.full_name || userEmail;
-            }
+        // مخفی کردن دکمه‌های ورود
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (mobileLoginBtn) mobileLoginBtn.style.display = 'none';
+        
+        // نمایش دکمه‌های خروج
+        if (logoutBtn) logoutBtn.style.display = 'block';
+        if (mobileLogoutBtn) mobileLogoutBtn.style.display = 'block';
+        
+        // نمایش/مخفی کردن لینک ادمین
+        if (adminLink) {
+            adminLink.style.display = isAdmin ? 'block' : 'none';
+        }
+        if (mobileAdminLink) {
+            mobileAdminLink.style.display = isAdmin ? 'block' : 'none';
         }
         
-        // نمایش/مخفی کردن المان‌های ادمین
-        document.querySelectorAll('.admin-only').forEach(el => {
-            el.style.display = isAdmin ? 'block' : 'none';
-        });
+        // به‌روزرسانی نام کاربر
+        if (welcomeText) {
+            welcomeText.textContent = currentUser.email || 'کاربر';
+        }
         
     } else {
-        // نمایش دکمه‌های ورود/ثبت‌نام
-        if (authButtons) authButtons.style.display = 'flex';
-        if (userMenu) userMenu.style.display = 'none';
+        // نمایش دکمه‌های ورود
+        if (loginBtn) loginBtn.style.display = 'block';
+        if (mobileLoginBtn) mobileLoginBtn.style.display = 'block';
+        
+        // مخفی کردن دکمه‌های خروج
+        if (logoutBtn) logoutBtn.style.display = 'none';
+        if (mobileLogoutBtn) mobileLogoutBtn.style.display = 'none';
+        
+        // مخفی کردن لینک ادمین
+        if (adminLink) adminLink.style.display = 'none';
+        if (mobileAdminLink) mobileAdminLink.style.display = 'none';
     }
 }
 
@@ -3356,7 +3629,109 @@ document.addEventListener('DOMContentLoaded', function() {
             justify-content: center;
         }
         
+        /* استایل‌های منوی موبایل */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+        }
+        
+        .hamburger span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: var(--dark);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100%;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            z-index: 1001;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+        
+        .mobile-menu.active {
+            right: 0;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
+        .mobile-menu-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .mobile-nav-links {
+            list-style: none;
+            padding: 20px;
+        }
+        
+        .mobile-nav-links li {
+            margin-bottom: 10px;
+        }
+        
+        .mobile-nav-links .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        
+        .mobile-nav-links .nav-link:hover {
+            background-color: var(--light);
+        }
+        
+        .mobile-nav-links .nav-link.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .mobile-user-actions {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+        }
+        
         @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .user-actions .btn {
+                display: none;
+            }
+            
             .analytics-grid {
                 grid-template-columns: 1fr;
             }
@@ -3379,4 +3754,4 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     
     document.head.appendChild(style);
-});    
+});
